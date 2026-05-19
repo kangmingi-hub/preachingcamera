@@ -171,14 +171,111 @@ let arUser=null;
 try{arUser=JSON.parse(localStorage.getItem('ar_user')||'null');}catch(e){}
 if(!arUser?.id) location.replace('/login');
 
-// localStorage에서 캐릭터 목록 가져오기
-async function getAllChars(){
-const{data}=await sb.from('characters').select('*').order('created_at');
-if(!data) return [];
-return data.map(c=>({
-id:c.id, name:c.name, grade:c.grade,
-emoji:c.emoji||null, imgData:c.img_data||null, desc:c.description||''
-}));
+const GITHUB_IMG = 'https://raw.githubusercontent.com/kangmingi-hub/preachingcamera/main/images/';
+
+function getAllChars(){
+  return [
+  { id:'c001', name:'가룟 유다',     grade:'common' },
+  { id:'c002', name:'가이사',        grade:'common' },
+  { id:'c003', name:'가인',          grade:'common' },
+  { id:'c004', name:'아벨',          grade:'common' },
+  { id:'c005', name:'갈렙',          grade:'common' },
+  { id:'c006', name:'고넬료',        grade:'rare'   },
+  { id:'c007', name:'고레스',        grade:'rare'   },
+  { id:'c008', name:'기드온',        grade:'rare'   },
+  { id:'c009', name:'노아',          grade:'epic'   },
+  { id:'c010', name:'누가',          grade:'rare'   },
+  { id:'c011', name:'느부갓네살',    grade:'rare'   },
+  { id:'c012', name:'다니엘',        grade:'epic'   },
+  { id:'c013', name:'다윗',          grade:'legend' },
+  { id:'c014', name:'도마',          grade:'common' },
+  { id:'c015', name:'드보라',        grade:'epic'   },
+  { id:'c016', name:'라합',          grade:'rare'   },
+  { id:'c017', name:'르호보암',      grade:'common' },
+  { id:'c018', name:'마리아',        grade:'epic'   },
+  { id:'c019', name:'마르다',        grade:'common' },
+  { id:'c020', name:'마태',          grade:'rare'   },
+  { id:'c021', name:'멜기세덱',      grade:'legend' },
+  { id:'c022', name:'모세',          grade:'legend' },
+  { id:'c023', name:'예수',          grade:'legend' },
+  { id:'c024', name:'바나바',        grade:'rare'   },
+  { id:'c025', name:'바로',          grade:'common' },
+  { id:'c026', name:'바울',          grade:'legend' },
+  { id:'c027', name:'벨사살',        grade:'common' },
+  { id:'c028', name:'비느하스',      grade:'rare'   },
+  { id:'c029', name:'사라',          grade:'epic'   },
+  { id:'c030', name:'사울',          grade:'common' },
+  { id:'c031', name:'솔로몬',        grade:'epic'   },
+  { id:'c032', name:'스데반',        grade:'epic'   },
+  { id:'c033', name:'아담',          grade:'epic'   },
+  { id:'c034', name:'아론',          grade:'rare'   },
+  { id:'c035', name:'아브라함',      grade:'legend' },
+  { id:'c036', name:'아합',          grade:'common' },
+  { id:'c037', name:'이세벨',        grade:'common' },
+  { id:'c038', name:'야고보',        grade:'rare'   },
+  { id:'c039', name:'야곱',          grade:'epic'   },
+  { id:'c040', name:'에녹',          grade:'legend' },
+  { id:'c041', name:'에스더',        grade:'epic'   },
+  { id:'c042', name:'엘리사',        grade:'epic'   },
+  { id:'c043', name:'엘리야',        grade:'legend' },
+  { id:'c044', name:'여호사밧',      grade:'rare'   },
+  { id:'c045', name:'여호수아',      grade:'epic'   },
+  { id:'c046', name:'예레미야',      grade:'epic'   },
+  { id:'c047', name:'요나',          grade:'rare'   },
+  { id:'c048', name:'요셉',          grade:'epic'   },
+  { id:'c049', name:'요시야',        grade:'rare'   },
+  { id:'c050', name:'요한',          grade:'epic'   },
+  { id:'c051', name:'유다',          grade:'rare'   },
+  { id:'c052', name:'이삭',          grade:'epic'   },
+  { id:'c053', name:'세례 요한',     grade:'epic'   },
+  { id:'c054', name:'하갈',          grade:'common' },
+  { id:'c055', name:'하와',          grade:'epic'   },
+  { id:'c056', name:'헤롯',          grade:'common' },
+  { id:'c057', name:'히스기야',      grade:'epic'   },
+  { id:'c058', name:'니고데모',      grade:'rare'   },
+  { id:'c059', name:'디도',          grade:'rare'   },
+  { id:'c060', name:'디모데',        grade:'rare'   },
+  { id:'c061', name:'마가',          grade:'rare'   },
+  { id:'c062', name:'베드로',        grade:'legend' },
+  { id:'c063', name:'뵈뵈',          grade:'rare'   },
+  { id:'c064', name:'빌레몬',        grade:'common' },
+  { id:'c065', name:'사가랴',        grade:'rare'   },
+  { id:'c066', name:'사마리아 여인', grade:'rare'   },
+  { id:'c067', name:'삭개오',        grade:'rare'   },
+  { id:'c068', name:'안나',          grade:'rare'   },
+  { id:'c069', name:'아볼로',        grade:'rare'   },
+  { id:'c070', name:'안드레',        grade:'rare'   },
+  { id:'c071', name:'엘리사벳',      grade:'rare'   },
+  { id:'c072', name:'나사로',        grade:'epic'   },
+  { id:'c073', name:'느헤미야',      grade:'epic'   },
+  { id:'c074', name:'룻',            grade:'epic'   },
+  { id:'c075', name:'사무엘',        grade:'epic'   },
+  { id:'c076', name:'삼손',          grade:'epic'   },
+  { id:'c077', name:'욥',            grade:'epic'   },
+  { id:'c078', name:'가브리엘',      grade:'legend' },
+  { id:'c079', name:'한나',          grade:'epic'   },
+  { id:'c080', name:'롯',            grade:'common' },
+  { id:'c081', name:'리브가',        grade:'rare'   },
+  { id:'c082', name:'레아',          grade:'common' },
+  { id:'c083', name:'라헬',          grade:'rare'   },
+  { id:'c084', name:'에서',          grade:'common' },
+  { id:'c085', name:'미리암',        grade:'rare'   },
+  { id:'c086', name:'입다',          grade:'common' },
+  { id:'c087', name:'나단',          grade:'rare'   },
+  { id:'c088', name:'엘가나',        grade:'common' },
+  { id:'c089', name:'이사야',        grade:'legend' },
+  { id:'c090', name:'호세아',        grade:'epic'   },
+  { id:'c091', name:'모르드개',      grade:'epic'   },
+  { id:'c092', name:'에스라',        grade:'epic'   },
+  { id:'c093', name:'빌라도',        grade:'common' },
+  { id:'c094', name:'실라',          grade:'rare'   },
+  { id:'c095', name:'루디아',        grade:'rare'   },
+  { id:'c096', name:'브리스길라',    grade:'rare'   },
+  { id:'c097', name:'아굴라',        grade:'rare'   },
+  { id:'c098', name:'빌립',          grade:'rare'   },
+  { id:'c099', name:'막달라 마리아', grade:'epic'   },
+  { id:'c100', name:'요셉',          grade:'epic'   },
+  ];
 }
 
 let allChars=[];
@@ -186,16 +283,13 @@ let myCollection=[];
 let currentFilter='all';
 
 async function init(){
-document.getElementById('user-name').textContent=arUser.nickname;
-const[chars,myData]=await Promise.all([
-getAllChars(),
-sb.from('collections').select('*')
-.or(user_id.eq.${arUser.id},nickname.eq.${arUser.nickname})
- ]);
-allChars=chars;
-myCollection=myData.data||[];
-renderStats();
-renderGrid();
+  document.getElementById('user-name').textContent=arUser.nickname;
+  allChars = getAllChars(); // async 제거
+  const{data}=await sb.from('collections').select('*')
+    .or(`user_id.eq.${arUser.id},nickname.eq.${arUser.nickname}`);
+  myCollection=data||[];
+  renderStats();
+  renderGrid();
 }
 
 function renderStats(){
@@ -228,9 +322,8 @@ grid.innerHTML=chars.map(char=>{
 const col=myCollection.find(c=>c.character_id===char.id);
 if(col){
 // 획득한 카드
-const img=char.imgData
-?<img src="${char.imgData}" class="char-img" alt="${char.name}">
-:<div class="char-emoji"&gt;${char.emoji||'✨'}</div>; return<div class="card unlocked ${char.grade}" onclick="openDetail('${char.id}')">
+const img=`<img src="${GITHUB_IMG}${char.id}.png" class="char-img" alt="${char.name}" onerror="this.style.display='none'">`;
+ return<div class="card unlocked ${char.grade}" onclick="openDetail('${char.id}')">
 <div class="card-grade-badge">${char.grade.toUpperCase()}&lt;/div&gt; &lt;div class="card-count"&gt;×${col.count}</div>
 ${img} &lt;div class="card-name"&gt;${char.name}</div>
 </div>; } else { // 미획득 카드 (실루엣) const gradeColors={common:'#88aacc',rare:'#aa88ff',epic:'#ff9900',legend:'#FFD700'}; return<div class="card locked">
