@@ -1,11 +1,9 @@
-import { HTML } from './src/html.js';
-import { LOGIN_HTML } from './src/login.js';
-import { CSS } from './src/css.js';
-import APP_JS from './src/app.js';
+// ⚠️ 이 파일은 build.js가 자동 생성합니다
+// CI에서 build.js 실행 후 이 파일을 덮어씁니다
 
-const FINAL_HTML = HTML
-  .replace('${CSS}', CSS)
-  .replace('__APP_JS__', APP_JS);
+const MAIN_HTML = "PLACEHOLDER_MAIN";
+const LOGIN_HTML = "PLACEHOLDER_LOGIN";
+const COLLECTION_HTML = "PLACEHOLDER_COLLECTION";
 
 export default {
   async fetch(request) {
@@ -20,7 +18,7 @@ export default {
         headers: { 'Content-Type': 'text/html;charset=UTF-8', 'Cache-Control': 'no-cache' },
       });
     }
-    return new Response(FINAL_HTML, {
+    return new Response(MAIN_HTML, {
       headers: { 'Content-Type': 'text/html;charset=UTF-8', 'Cache-Control': 'public, max-age=300' },
     });
   },
