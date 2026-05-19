@@ -184,7 +184,8 @@ async function init(){
   document.getElementById('user-name').textContent=arUser.nickname;
   const[chars,myData]=await Promise.all([
     getAllChars(),
-    sb.from('collections').select('*').eq('user_id',arUser.id)
+    sb.from('collections').select('*')
+      .or(`user_id.eq.${arUser.id},nickname.eq.${arUser.nickname}`)
   ]);
   allChars=chars;
   myCollection=myData.data||[];
