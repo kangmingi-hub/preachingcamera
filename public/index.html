@@ -1253,7 +1253,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const colBtn = document.createElement('button');
   colBtn.textContent = '📖 내 도감';
   colBtn.onclick = () => location.href = 'collection.html';
-  colBtn.style.cssText = 'position:absolute;bottom:56px;right:20px;z-index:1;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);color:#FFD700;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;';
+  // ✅ 큰따옴표로 감싸기
+  colBtn.style.cssText = "position:absolute;bottom:56px;right:20px;z-index:1;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);color:#FFD700;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;";
   home.appendChild(colBtn);
 });
 
