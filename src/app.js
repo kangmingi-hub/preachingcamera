@@ -8,6 +8,22 @@ const DEFAULT_CHARS = [
   { id:'d4', name:'성령',   grade:'legend', emoji:'✨', desc:'전설의 성령 임재' },
 ];
 const state = { members:0, goal:0, count:0, characters:[], currentChar:null, stream:null, charX:50, charY:28 };
+partners:[], // 전도짝 이름 배열
+  facingMode:'user', // 전면 카메라 기본값
+};
+
+function confirmTeam() {
+  const p1 = document.getElementById('partner-1').value.trim();
+  const p2 = document.getElementById('partner-2').value.trim();
+  const p3 = document.getElementById('partner-3').value.trim();
+  if (!p1) { showToast('팀원 1 이름을 입력하세요'); return; }
+  state.partners = [p1, p2, p3].filter(Boolean);
+  state.members = state.partners.length + 1; // 본인 포함
+  state.goal = state.members * 10;
+  saveState();
+  showScreen('home');
+  updateHomeUI();
+}
 
 // ── 상태 저장/불러오기 ──
 function loadState() {
@@ -111,10 +127,23 @@ function spawnParticles(grade) {
 async function openCamera() { showScreen('ar-screen'); await startCamera(); renderARChar(); setupDrag(); }
 async function startCamera() {
   try {
-    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}});
-    state.stream=stream; const v=document.getElementById('cam-video'); v.srcObject=stream; await v.play();
-  } catch(e) { showModal('카메라 오류','카메라 접근 권한을 허용해주세요.'); showScreen('home'); }
+    if (state.stream) stopStream();
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: state.facingMode, width:{ideal:1920}, height:{ideal:1080} }
+    });
+    state.stream = stream;
+    const v = document.getElementById('cam-video'); v.srcObject = stream; await v.play();
+  } catch(e) {
+    showModal('카메라 오류','카메라 접근 권한을 허용해주세요.');
+    showScreen('home');
+  }
 }
+
+function flipCamera() {
+  state.facingMode = state.facingMode === 'user' ? 'environment' : 'user';
+  startCamera();
+}
+
 function closeCamera() { stopStream(); showScreen('home'); }
 function stopStream() { if(state.stream){state.stream.getTracks().forEach(t=>t.stop());state.stream=null;} }
 function renderARChar() {
@@ -210,16 +239,47 @@ let arUser=null;
 try{arUser=JSON.parse(localStorage.getItem('ar_user')||'null');}catch(e){}
 if(!arUser?.id) location.replace('/login');
 function doLogout(){localStorage.removeItem('ar_user');location.replace('/login');}
-async function saveToCollection(char){
-  try{
-    const{data:ex}=await sb.from('collections').select('id,count').eq('user_id',arUser.id).eq('character_id',char.id).maybeSingle();
-    if(ex){await sb.from('collections').update({count:ex.count+1,last_obtained_at:new Date().toISOString()}).eq('id',ex.id);showToast(`📖 ${char.name} +1 (${ex.count+1}번째 획득!)`);}
-    else{await sb.from('collections').insert({user_id:arUser.id,character_id:char.id,character_name:char.name,grade:char.grade,emoji:char.emoji||null,count:1,first_obtained_at:new Date().toISOString(),last_obtained_at:new Date().toISOString()});showToast(`✨ 새 캐릭터 도감 등록! [${char.name}]`);}
-    await sb.from('gacha_logs').insert({user_id:arUser.id,character_id:char.id,character_name:char.name,grade:char.grade});
-  }catch(e){console.error('도감 저장 실패',e);}
+async function saveToCollection(char) {
+  try {
+    // 본인 + 전도짝 전체에 저장
+    const allUsers = [arUser, ...state.partners.map(name => ({ nickname: name }))];
+    
+    // 팀원 ID 조회
+    const { data: users } = await sb.from('users').select('id,nickname')
+      .in('nickname', state.partners);
+    const partnerMap = {};
+    if (users) users.forEach(u => partnerMap[u.nickname] = u.id);
+
+    const targets = [
+      { id: arUser.id, nickname: arUser.nickname },
+      ...state.partners.map(name => ({ id: partnerMap[name], nickname: name })).filter(u => u.id)
+    ];
+
+    for (const user of targets) {
+      const { data: ex } = await sb.from('collections').select('id,count')
+        .eq('user_id', user.id).eq('character_id', char.id).maybeSingle();
+      if (ex) {
+        await sb.from('collections').update({ count: ex.count+1, last_obtained_at: new Date().toISOString() }).eq('id', ex.id);
+      } else {
+        await sb.from('collections').insert({
+          user_id: user.id, character_id: char.id, character_name: char.name,
+          grade: char.grade, emoji: char.emoji||null, count: 1,
+          first_obtained_at: new Date().toISOString(), last_obtained_at: new Date().toISOString(),
+        });
+      }
+      await sb.from('gacha_logs').insert({ user_id: user.id, character_id: char.id, character_name: char.name, grade: char.grade });
+    }
+    showToast(`✨ ${targets.length}명 도감 저장 완료! [${char.name}]`);
+  } catch(e) { console.error('도감 저장 실패', e); }
 }
 
 // ── 초기화 ──
-loadState(); updateHomeUI();
+loadState();
+if (state.partners.length > 0) {
+  showScreen('home');
+  updateHomeUI();
+} else {
+  showScreen('team-screen');
+}
 if(state.members>0) document.querySelectorAll('.mbtn').forEach((b,i)=>b.classList.toggle('selected',i===state.members-1));
 window.addEventListener('DOMContentLoaded',()=>{ if(arUser) injectHomeUserBar(arUser); });
