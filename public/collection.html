@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>내 도감 - 전도 AR 인증샷</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;600;700&display=swap');
+
+:root {
+  --gold: #FFD700;
+  --gold2: #FFA500;
+  --common-c: #88aacc;
+  --rare-c: #aa88ff;
+  --epic-c: #ff9900;
+  --legend-c: #FFD700;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body {
+  width:100%; min-height:100%;
+  background:linear-gradient(160deg,#0d1b3e,#0a0a2e);
+  font-family:'Noto Sans KR',sans-serif; color:white;
+}
+
+/* ── 상단 헤더 ── */
+.header {
+  position:sticky; top:0; z-index:50;
+  background:rgba(10,10,46,.9); backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,215,0,.15);
+  padding:14px 18px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.header-left { display:flex; align-items:center; gap:10px; }
+.btn-back {
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
+  color:white; border-radius:99px; padding:7px 14px;
+  font-size:13px; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+  text-decoration:none; display:inline-block;
+}
+.header h1 {
+  font-family:'Black Han Sans',sans-serif; font-size:18px; color:var(--gold);
+}
+.header-user {
+  font-size:12px; color:rgba(255,255,255,.5);
+  background:rgba(255,255,255,.07); border-radius:99px; padding:5px 12px;
+}
+.header-user span { color:var(--gold); font-weight:700; }
+
+/* ── 통계 ── */
+.stats {
+  display:flex; gap:10px; padding:16px 18px 8px;
+}
+.stat-box {
+  flex:1; background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1); border-radius:16px;
+  padding:14px 10px; text-align:center;
+}
+.stat-box .num {
+  font-family:'Black Han Sans',sans-serif; font-size:26px; color:var(--gold);
+  line-height:1;
+}
+.stat-box .lbl { font-size:11px; color:rgba(255,255,255,.4); margin-top:4px; }
+
+/* ── 섹션 ── */
+.section { padding:12px 18px; }
+.section-title {
+  font-size:13px; font-weight:700; margin-bottom:10px; padding-left:2px;
+  display:flex; align-items:center; gap:8px;
+}
+.section-title.legend { color:var(--legend-c); }
+.section-title.epic   { color:var(--epic-c); }
+.section-title.rare   { color:var(--rare-c); }
+.section-title.common { color:var(--common-c); }
+.section-title .progress {
+  font-size:11px; font-weight:400; opacity:.7;
+}
+
+/* ── 그리드 ── */
+.grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+}
+@media(min-width:400px) { .grid { grid-template-columns:repeat(4,1fr); } }
+
+.card {
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px; padding:12px 8px;
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  position:relative; transition:all .2s;
+}
+
+/* 소유한 카드 */
+.card.owned.common { border-color:rgba(136,170,204,.35); background:rgba(136,170,204,.06); }
+.card.owned.rare   { border-color:rgba(170,136,255,.4);  background:rgba(170,136,255,.06); }
+.card.owned.epic   { border-color:rgba(255,153,0,.4);    background:rgba(255,153,0,.06); }
+.card.owned.legend {
+  border-color:rgba(255,215,0,.5); background:rgba(255,215,0,.08);
+  box-shadow:0 0 14px rgba(255,215,0,.15);
+}
+
+.card-visual { font-size:38px; line-height:1; }
+.card-img { width:56px; height:56px; object-fit:contain; border-radius:8px; }
+
+.card-name {
+  font-size:11px; font-weight:700; text-align:center;
+  color:white; line-height:1.3; word-break:keep-all;
+}
+.card-count {
+  font-size:10px; font-weight:700;
+  background:rgba(255,215,0,.2); color:var(--gold);
+  border-radius:99px; padding:2px 9px;
+}
+.card-new {
+  position:absolute; top:6px; left:6px;
+  font-size:9px; font-weight:700; color:#fff;
+  background:var(--epic-c); border-radius:99px; padding:1px 6px;
+}
+
+/* 미획득 오버레이 */
+.card-lock {
+  position:absolute; inset:0; border-radius:14px;
+  background:rgba(0,0,0,.6);
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px;
+}
+
+/* ── 빈 상태 ── */
+.empty {
+  text-align:center; padding:48px 20px;
+  color:rgba(255,255,255,.3); font-size:14px; line-height:2;
+}
+
+/* ── 로딩 ── */
+.loading {
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; padding:60px 20px; gap:14px;
+  color:rgba(255,255,255,.4); font-size:13px;
+}
+.spinner {
+  width:32px; height:32px;
+  border:3px solid rgba(255,215,0,.2);
+  border-top-color:var(--gold);
+  border-radius:50%; animation:spin .7s linear infinite;
+}
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ── 하단 여백 ── */
+.bottom-pad { height:32px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <a class="btn-back" href="index.html">← 뒤로</a>
+    <h1>📖 내 도감</h1>
+  </div>
+  <div class="header-user">👤 <span id="username-display">-</span></div>
+</div>
+
+<div class="stats">
+  <div class="stat-box"><div class="num" id="stat-total">-</div><div class="lbl">총 획득</div></div>
+  <div class="stat-box"><div class="num" id="stat-unique">-</div><div class="lbl">종류</div></div>
+  <div class="stat-box"><div class="num" id="stat-legend">-</div><div class="lbl">레전드</div></div>
+</div>
+
+<div id="main-content">
+  <div class="loading">
+    <div class="spinner"></div>
+    <div>도감 불러오는 중...</div>
+  </div>
+</div>
+
+<div class="bottom-pad"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPA_URL = 'https://ouugfofqiefrbfshgeep.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im91dWdmb2ZxaWVmcmJmc2hnZWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNzgyODUsImV4cCI6MjA5NDc1NDI4NX0.5wlvTtlLPPQ8C5JF8dwzB1Rgo2rGf1oniF9wasZLi6g';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+const gradeLabels = { common:'⭐ COMMON', rare:'⭐⭐ RARE', epic:'⭐⭐⭐ EPIC', legend:'🌟 LEGEND' };
+const gradeOrder  = ['legend','epic','rare','common'];
+
+// ── 로그인 확인 ──
+const saved = localStorage.getItem('ar_user');
+let currentUser = null;
+try { currentUser = saved ? JSON.parse(saved) : null; } catch(e) {}
+if (!currentUser?.id) { location.replace('login.html'); }
+
+document.getElementById('username-display').textContent = currentUser.nickname;
+
+// ── 캐릭터 목록 (index.html과 동기화: localStorage에서 읽기) ──
+function getAllChars() {
+  const key = 'eva_state';
+  try {
+    const s = JSON.parse(localStorage.getItem(key) || '{}');
+    return s.characters?.length ? s.characters : defaultChars;
+  } catch(e) { return defaultChars; }
+}
+
+const defaultChars = [
+  { id:'d1', name:'비둘기', grade:'common',  emoji:'🕊️' },
+  { id:'d2', name:'천사',   grade:'rare',    emoji:'👼' },
+  { id:'d3', name:'대천사', grade:'epic',    emoji:'😇' },
+  { id:'d4', name:'성령',   grade:'legend',  emoji:'✨' },
+];
+
+// ── 도감 로드 ──
+async function loadCollection() {
+  const allChars = getAllChars();
+
+  const { data: owned, error } = await sb
+    .from('collections')
+    .select('*')
+    .eq('user_id', currentUser.id);
+
+  if (error) {
+    document.getElementById('main-content').innerHTML =
+      '<div class="empty">도감을 불러오지 못했어요.<br>잠시 후 다시 시도해주세요.</div>';
+    return;
+  }
+
+  // 소유 맵
+  const ownedMap = {};
+  (owned || []).forEach(c => { ownedMap[c.character_id] = c; });
+
+  // 통계
+  const totalGained = (owned||[]).reduce((s,c)=>s+c.count, 0);
+  const uniqueCount = (owned||[]).length;
+  const legendCount = (owned||[]).filter(c=>c.grade==='legend').reduce((s,c)=>s+c.count,0);
+
+  document.getElementById('stat-total').textContent  = totalGained;
+  document.getElementById('stat-unique').textContent = `${uniqueCount}/${allChars.length}`;
+  document.getElementById('stat-legend').textContent = legendCount;
+
+  // 새로 획득한 캐릭터 (5분 이내)
+  const recentThreshold = Date.now() - 5 * 60 * 1000;
+  const isNew = (col) => col && new Date(col.last_obtained_at).getTime() > recentThreshold;
+
+  // 렌더
+  let html = '';
+  for (const grade of gradeOrder) {
+    const chars = allChars.filter(c => c.grade === grade);
+    if (!chars.length) continue;
+
+    const ownedInGrade = chars.filter(c => ownedMap[c.id]).length;
+    html += `
+      <div class="section">
+        <div class="section-title ${grade}">
+          ${gradeLabels[grade]}
+          <span class="progress">${ownedInGrade}/${chars.length}</span>
+        </div>
+        <div class="grid">
+    `;
+
+    for (const c of chars) {
+      const col = ownedMap[c.id];
+      const owned = !!col;
+      const newBadge = isNew(col) ? '<div class="card-new">NEW</div>' : '';
+
+      const visual = c.imgData
+        ? `<img src="${c.imgData}" class="card-img" alt="${c.name}">`
+        : `<div class="card-visual">${owned ? (c.emoji||'✨') : '❓'}</div>`;
+
+      html += `
+        <div class="card ${owned ? 'owned ' + grade : ''}">
+          ${newBadge}
+          ${visual}
+          <div class="card-name">${owned ? c.name : '???'}</div>
+          ${owned ? `<div class="card-count">×${col.count}</div>` : ''}
+          ${!owned ? '<div class="card-lock">🔒</div>' : ''}
+        </div>
+      `;
+    }
+
+    html += `</div></div>`;
+  }
+
+  document.getElementById('main-content').innerHTML = html ||
+    '<div class="empty">등록된 캐릭터가 없습니다.</div>';
+}
+
+loadCollection();
+</script>
+</body>
+</html>
