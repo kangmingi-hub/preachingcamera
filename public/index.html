@@ -302,6 +302,12 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
   cursor:pointer; display:flex; align-items:center; justify-content:center;
 }
 
+  .hud-flip {
+    background:rgba(255,255,255,.15); border:none; color:white;
+    width:36px; height:36px; border-radius:50%; font-size:18px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+
 /* Position control */
 .ar-pos-hint {
   position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
@@ -578,6 +584,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
 
   <div class="ar-hud-top">
     <div class="hud-grade" id="hud-grade">COMMON</div>
+    <button class="hud-flip" onclick="flipCamera()">🔄</button>
     <button class="hud-close" onclick="closeCamera()">✕</button>
   </div>
 
@@ -679,6 +686,7 @@ let state = {
   stream: null,
   charX: null, // % from center
   charY: null, // % from bottom
+  facingMode: 'environment',
 };
 
 // Default characters (emoji fallback)
@@ -789,8 +797,11 @@ function rollCharacter() {
 function startGacha() {
   const char = rollCharacter();
   state.currentChar = char;
-  state.charX = 50; // center %
-  state.charY = 28; // bottom %
+  state.charX = 50;
+  state.charY = 28;
+  // 가챠 화면 건너뛰고 바로 카메라로
+  openCamera();
+}
 
   // Setup gacha card
   const card = document.getElementById('gacha-card');
@@ -866,6 +877,12 @@ async function startCamera() {
   }
 }
 
+  // flipCamera 함수 추가
+async function flipCamera() {
+  state.facingMode = state.facingMode === 'environment' ? 'user' : 'environment';
+  await startCamera();
+}
+
 function closeCamera() {
   if (state.stream) {
     state.stream.getTracks().forEach(t => t.stop());
@@ -896,7 +913,7 @@ function renderARChar() {
   }
 
   // Nameplate
-  document.getElementById('ar-char-nameplate').textContent = char.name;
+  document.getElementById('ar-char-nameplate').textContent = '???';
 
   // Position
   const overlay = document.getElementById('ar-char-overlay');
