@@ -167,11 +167,13 @@ try{arUser=JSON.parse(localStorage.getItem('ar_user')||'null');}catch(e){}
 if(!arUser?.id) location.replace('/login');
 
 // localStorage에서 캐릭터 목록 가져오기
-function getAllChars(){
-  try{
-    const s=JSON.parse(localStorage.getItem('eva_state')||'{}');
-    return s.characters||[];
-  }catch(e){return [];}
+async function getAllChars(){
+  const{data}=await sb.from('characters').select('*').order('created_at');
+  if(!data) return [];
+  return data.map(c=>({
+    id:c.id, name:c.name, grade:c.grade,
+    emoji:c.emoji||null, imgData:c.img_data||null, desc:c.description||''
+  }));
 }
 
 let allChars=[];
@@ -180,12 +182,12 @@ let currentFilter='all';
 
 async function init(){
   document.getElementById('user-name').textContent=arUser.nickname;
-  allChars=getAllChars();
-
-  // 내 컬렉션 조회
-  const{data}=await sb.from('collections').select('*').eq('user_id',arUser.id);
-  myCollection=data||[];
-
+  const[chars,myData]=await Promise.all([
+    getAllChars(),
+    sb.from('collections').select('*').eq('user_id',arUser.id)
+  ]);
+  allChars=chars;
+  myCollection=myData.data||[];
   renderStats();
   renderGrid();
 }
