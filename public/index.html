@@ -63,11 +63,11 @@ function doLogout() {
   location.replace('login.html');
 }
 
-// ── 4. 사진 찍으면 도감 자동 저장 ──
-//    기존 captureAndShow 함수를 감싸서 저장 추가
-const _origCaptureAndShow = captureAndShow;
-captureAndShow = async function() {
-  await _origCaptureAndShow();
+// captureAndShow를 직접 덮어쓰지 않고,
+// takePhoto에서 호출 후 저장하는 방식으로 변경
+const _origTakePhoto = takePhoto;
+takePhoto = async function() {
+  await _origTakePhoto();
   const char = state.currentChar;
   if (char && arUser?.id) saveToCollection(char);
 };
