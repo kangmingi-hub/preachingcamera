@@ -529,10 +529,10 @@ export default {
 
     // 모든 경로에서 index.html 반환 (SPA 방식)
     return new Response(HTML, {
-      headers: {
-        'Content-Type': 'text/html;charset=UTF-8',
-        'Cache-Control': 'no-cache',
-      },
-    });
+  headers: {
+    'Content-Type': 'text/html;charset=UTF-8',
+    'Cache-Control': 'public, max-age=300',
+  },
+});
   },
 };
