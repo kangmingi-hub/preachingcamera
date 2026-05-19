@@ -21,6 +21,11 @@ export const HTML = `<!DOCTYPE html>
   <div class="home-icon">👥</div>
   <h1 class="home-title">전도짝<br>입력</h1>
   <p class="home-sub">함께 전도할 팀원을 입력하세요</p>
+  <div class="member-box">
+    <h3>👤 전도짝 이름 (최대 3명)</h3>
+    <div class="char-form-row" style="margin-bottom:10px;">
+      <input type="text" id="partner-1" placeholder="팀원 1 이름">
+    </div>
     <div class="char-form-row" style="margin-bottom:10px;">
       <input type="text" id="partner-2" placeholder="팀원 2 이름 (선택)">
     </div>
@@ -32,20 +37,13 @@ export const HTML = `<!DOCTYPE html>
 </div>
 
 <!-- HOME -->
-<div id="home" class="screen active">
+<div id="home" class="screen">
   <div class="stars-bg"></div>
   <div class="home-icon">✨</div>
   <h1 class="home-title">전도 AR<br>인증샷</h1>
   <p class="home-sub">전도 목표 달성 → 가챠 캐릭터 등장!</p>
   <div class="member-box">
-    <h3>👥 전도 나간 인원 수</h3>
-    <div class="member-btns">
-      <button class="mbtn" onclick="setMembers(1)">1명</button>
-      <button class="mbtn" onclick="setMembers(2)">2명</button>
-      <button class="mbtn" onclick="setMembers(3)">3명</button>
-      <button class="mbtn" onclick="setMembers(4)">4명</button>
-      <button class="mbtn" onclick="setMembers(5)">5명</button>
-    </div>
+    <h3>👥 팀원 <span id="team-names" style="color:var(--gold);font-size:13px;"></span></h3>
     <div class="member-goal">목표: <span id="goal-display">-</span>명 전도</div>
   </div>
   <div class="prog-wrap">
@@ -100,7 +98,7 @@ export const HTML = `<!DOCTYPE html>
   <div class="ar-bottom">
     <button class="ar-reroll" onclick="rerollCharacter()">🎲<br>다시<br>뽑기</button>
     <button class="shutter" onclick="takePhoto()"><div class="shutter-inner"></div></button>
-   <button class="ar-reroll" onclick="flipCamera()">🔄<br>카메라<br>전환</button>
+    <button class="ar-reroll" onclick="flipCamera()">🔄<br>카메라<br>전환</button>
   </div>
   <div class="flash" id="flash"></div>
 </div>
