@@ -213,18 +213,32 @@ function goHome(){stopStream();showScreen('home');updateHomeUI();}
 // ── 캐릭터 관리 ──
 let pendingImgData=null;
 function previewImg(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{pendingImgData=e.target.result;const p=document.getElementById('img-preview-el');p.src=pendingImgData;p.style.display='block';};r.readAsDataURL(file);}
-function addCharacter(){
+async function addCharacter(){
   const name=document.getElementById('char-name-input').value.trim();
   const grade=document.getElementById('char-grade-select').value;
   const emoji=document.getElementById('char-emoji-input').value.trim();
   if(!name){showToast('캐릭터 이름을 입력하세요');return;}
   if(!pendingImgData&&!emoji){showToast('이미지 또는 이모지를 입력하세요');return;}
   const dm={legend:'전설의 캐릭터',epic:'강력한 캐릭터',rare:'희귀 캐릭터',common:'일반 캐릭터'};
-  state.characters.push({id:'c'+Date.now(),name,grade,imgData:pendingImgData||null,emoji:emoji||null,desc:dm[grade]});
+  const newChar={id:'c'+Date.now(),name,grade,imgData:pendingImgData||null,emoji:emoji||null,desc:dm[grade]};
+
+  // Supabase에 저장
+  const{error}=await sb.from('characters').insert({
+    id:newChar.id, name:newChar.name, grade:newChar.grade,
+    emoji:newChar.emoji||null, img_data:newChar.imgData||null, description:newChar.desc
+  });
+  if(error){showToast('❌ 저장 실패: '+error.message);return;}
+
+  // 로컬 상태에도 반영
+  state.characters.push(newChar);
   saveState(); resetCharForm(); renderCharList(); showToast('✅ '+name+' 추가됨!');
 }
 function resetCharForm(){document.getElementById('char-name-input').value='';document.getElementById('char-emoji-input').value='';document.getElementById('img-preview-el').style.display='none';document.getElementById('char-file-input').value='';pendingImgData=null;}
-function deleteCharacter(id){state.characters=state.characters.filter(c=>c.id!==id);saveState();renderCharList();}
+async function deleteCharacter(id){
+  await sb.from('characters').delete().eq('id',id);
+  state.characters=state.characters.filter(c=>c.id!==id);
+  saveState(); renderCharList();
+}
 function renderCharList(){
   const list=document.getElementById('char-list'),chars=state.characters;
   if(!chars.length){list.innerHTML='<div class="no-chars">등록된 캐릭터가 없습니다.<br>기본 캐릭터(이모지)가 사용됩니다.</div>';return;}
@@ -267,11 +281,26 @@ async function saveToCollection(char){
 }
 
 // ── 초기화 ──
-loadState();
-if(state.partners.length>0){
-  showScreen('home');
-  updateHomeUI();
-} else {
-  showScreen('team-screen');
+async function initApp(){
+  loadState();
+
+  // Supabase에서 최신 캐릭터 목록 불러오기
+  const{data:chars}=await sb.from('characters').select('*').order('created_at');
+  if(chars&&chars.length>0){
+    state.characters=chars.map(c=>({
+      id:c.id, name:c.name, grade:c.grade,
+      emoji:c.emoji||null, imgData:c.img_data||null, desc:c.description||''
+    }));
+    saveState();
+  }
+
+  if(state.partners.length>0){
+    showScreen('home');
+    updateHomeUI();
+  } else {
+    showScreen('team-screen');
+  }
+  if(arUser) injectHomeUserBar(arUser);
 }
-window.addEventListener('DOMContentLoaded',()=>{ if(arUser) injectHomeUserBar(arUser); });
+
+window.addEventListener('DOMContentLoaded', initApp);
