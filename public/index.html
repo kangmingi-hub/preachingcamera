@@ -63,14 +63,6 @@ function doLogout() {
   location.replace('login.html');
 }
 
-// captureAndShow를 직접 덮어쓰지 않고,
-// takePhoto에서 호출 후 저장하는 방식으로 변경
-const _origTakePhoto = takePhoto;
-takePhoto = async function() {
-  await _origTakePhoto();
-  const char = state.currentChar;
-  if (char && arUser?.id) saveToCollection(char);
-};
 
 async function saveToCollection(char) {
   try {
@@ -113,4 +105,14 @@ async function saveToCollection(char) {
     console.error('도감 저장 실패', e);
   }
 }
+document.addEventListener('DOMContentLoaded', () => {
+  const shutter = document.querySelector('.shutter');
+  if (shutter) {
+    shutter.addEventListener('click', async () => {
+      await new Promise(r => setTimeout(r, 500)); // 촬영 완료 대기
+      if (state.currentChar && arUser?.id) saveToCollection(state.currentChar);
+    });
+  }
+});
+  
 </script>
