@@ -272,7 +272,13 @@ async function saveToCollection(char){
       if(ex){
         await sb.from('collections').update({count:ex.count+1,last_obtained_at:new Date().toISOString()}).eq('id',ex.id);
       } else {
-        await sb.from('collections').insert({user_id:user.id,character_id:char.id,character_name:char.name,grade:char.grade,emoji:char.emoji||null,count:1,first_obtained_at:new Date().toISOString(),last_obtained_at:new Date().toISOString()});
+      await sb.from('collections').insert({
+  user_id:user.id, nickname:user.nickname,
+  character_id:char.id, character_name:char.name,
+  grade:char.grade, emoji:char.emoji||null, count:1,
+  first_obtained_at:new Date().toISOString(),
+  last_obtained_at:new Date().toISOString()
+});
       }
       await sb.from('gacha_logs').insert({user_id:user.id,character_id:char.id,character_name:char.name,grade:char.grade});
     }
