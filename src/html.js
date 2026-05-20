@@ -33,7 +33,9 @@ export const HTML = `<!DOCTYPE html>
       <input type="text" id="partner-3" placeholder="팀원 3 이름 (선택)">
     </div>
   </div>
-  <button class="btn-ar" onclick="confirmTeam()" style="margin-top:8px;">✅ 시작하기</button>
+  <div style="display:flex;gap:12px;margin-top:8px;">
+  <button class="btn-ar" onclick="location.href='/collection'" style="background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:#FFD700;box-shadow:none;">📖 도감보기</button>
+  <button class="btn-ar" onclick="confirmTeam()">✅ 시작하기</button>
 </div>
 
 <!-- HOME -->
