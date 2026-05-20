@@ -463,6 +463,7 @@ async function initApp(){
   }
 
  showScreen('team-screen');
+updateHomeUI();
  if(arUser){
   const{data:me}=await sb.from('users').select('role').eq('id',arUser.id).single();
   if(me) { arUser.role=me.role; localStorage.setItem('ar_user',JSON.stringify(arUser)); }
