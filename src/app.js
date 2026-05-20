@@ -281,21 +281,18 @@ async function captureAndShow() {
   const tag=document.getElementById('result-grade-tag'); tag.className='result-grade-tag '+(char?char.grade:''); tag.textContent=char?GRADE_LABELS[char.grade]:'';
   showScreen('result-screen');
 }
+// ✅ 수정된 drawChar 전체
 async function drawChar(ctx,char,x,y,sz){
   ctx.save(); ctx.shadowColor='rgba(255,215,0,.8)'; ctx.shadowBlur=30;
   const imgUrl = GITHUB_IMG + char.id + '.png';
-  if(true){
-    try{
-      const img=new Image(); img.crossOrigin='anonymous'; img.src=imgUrl;
-      await new Promise((r,j)=>{ img.onload=r; img.onerror=j; });
-      ctx.drawImage(img,x-sz/2,y-sz,sz,sz);
-    }catch(e){
-      // 이미지 없으면 텍스트로 대체
-      ctx.font=(sz*.5)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillStyle='rgba(255,255,255,.3)'; ctx.fillText('👤',x,y-sz/2);
-    }
-const img=new Image();img.src=char.imgData;await new Promise(r=>{img.onload=r;img.onerror=r;});ctx.drawImage(img,x-sz/2,y-sz,sz,sz);}
-  else{ctx.font=(sz*.85)+'px serif';ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(char.emoji||'✨',x,y);}
+  try{
+    const img=new Image(); img.crossOrigin='anonymous'; img.src=imgUrl;
+    await new Promise((r,j)=>{ img.onload=r; img.onerror=j; });
+    ctx.drawImage(img,x-sz/2,y-sz,sz,sz);
+  }catch(e){
+    ctx.font=(sz*.5)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle='rgba(255,255,255,.3)'; ctx.fillText('👤',x,y-sz/2);
+  }
   ctx.restore();
 }
 function drawNameplate(ctx,char,x,y,W){
