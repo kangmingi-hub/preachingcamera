@@ -267,6 +267,8 @@ async function startCamera() {
       video:{ facingMode:state.facingMode, width:{ideal:1920}, height:{ideal:1080} }
     });
     state.stream=stream; const v=document.getElementById('cam-video'); v.srcObject=stream; await v.play();
+    // 전면카메라만 좌우반전
+    v.style.transform = state.facingMode==='user' ? 'scaleX(-1)' : 'scaleX(1)';
   } catch(e) { showModal('카메라 오류','카메라 접근 권한을 허용해주세요.'); showScreen('home'); }
 }
 function flipCamera() {
@@ -312,10 +314,12 @@ async function captureAndShow() {
     const video=document.getElementById('cam-video'),char=state.currentChar,canvas=document.getElementById('result-canvas');
     const W=video.videoWidth||1280,H=video.videoHeight||720;
     canvas.width=W; canvas.height=H; const ctx=canvas.getContext('2d');
-   ctx.save();
-    ctx.translate(W, 0);
-    ctx.scale(-1, 1);
-    ctx.drawImage(video, 0, 0, W, H);
+ctx.save();
+    if(state.facingMode==='user'){
+      ctx.translate(W,0);
+      ctx.scale(-1,1);
+    }
+    ctx.drawImage(video,0,0,W,H);
     ctx.restore();
 if(char){
   const cx=state.charX/100*W,cy=(1-state.charY/100)*H;
