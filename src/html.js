@@ -37,6 +37,7 @@ export const HTML = `<!DOCTYPE html>
   <button class="btn-ar" onclick="location.href='/collection'" style="background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:#FFD700;box-shadow:none;">📖 도감보기</button>
   <button class="btn-ar" onclick="confirmTeam()">✅ 시작하기</button>
 </div>
+</div>
 
 <!-- HOME -->
 <div id="home" class="screen">
