@@ -1,4 +1,4 @@
-export const COLLECTION_HTML = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -291,7 +291,7 @@ function renderStats(){
 const total=allChars.length;
 const obtained=myCollection.length;
 const pct=total>0?Math.round(obtained/total*100):0;
-document.getElementById('user-stats').textContent=획득 ${obtained} / 전체 ${total};
+document.getElementById('user-stats').textContent='획득 '+obtained+' / 전체 '+total;
 document.getElementById('progress-pct').textContent=pct+'%';
 document.getElementById('progress-fill').style.width=pct+'%';
 }
@@ -349,5 +349,5 @@ document.getElementById('detail-overlay').classList.remove('open');
 init();
 </script>
 </body>
-</html>`;
+</html>
 
