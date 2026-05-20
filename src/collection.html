@@ -317,7 +317,7 @@ grid.innerHTML=chars.map(char=>{
 const col=myCollection.find(c=>c.character_id===char.id);
 if(col){
   const img='<img src="'+GITHUB_IMG+char.id+'.png" class="char-img" alt="'+char.name+'" onerror="this.style.display=\'none\'">';
-  return '<div class="card unlocked '+char.grade+'" onclick="openDetail(\''+char.id+'\')">'
+ return '<div class="card unlocked '+char.grade+'" onclick="openDetail('+JSON.stringify(char.id)+')">'
   +'<div class="card-grade-badge">'+char.grade.toUpperCase()+'</div>'
   +'<div class="card-count">×'+col.count+'</div>'
   +img
