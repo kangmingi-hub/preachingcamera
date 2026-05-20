@@ -217,8 +217,20 @@ function showChangePw(){
 // ── 가챠 ──
 function rollCharacter() {
   const pool=DEFAULT_CHARS;
-  const r=Math.random()*100; let cum=0; let grade='common';
-  for(const [g,w] of Object.entries(GRADE_WEIGHTS)){cum+=w;if(r<cum){grade=g;break;}}
+  // 목표 초과 인원 10명당 epic+1%, legend+0.5%
+  const extra=Math.max(0, state.count - state.goal);
+  const bonusSteps=Math.floor(extra/10);
+  const epicBonus=bonusSteps*1;
+  const legendBonus=bonusSteps*0.5;
+  const weights={
+    common: Math.max(0, GRADE_WEIGHTS.common - epicBonus - legendBonus),
+    rare:   GRADE_WEIGHTS.rare,
+    epic:   GRADE_WEIGHTS.epic + epicBonus,
+    legend: GRADE_WEIGHTS.legend + legendBonus,
+  };
+  const total=Object.values(weights).reduce((a,b)=>a+b,0);
+  const r=Math.random()*total; let cum=0; let grade='common';
+  for(const [g,w] of Object.entries(weights)){cum+=w;if(r<cum){grade=g;break;}}
   const gp=pool.filter(c=>c.grade===grade); const src=gp.length>0?gp:pool;
   return src[Math.floor(Math.random()*src.length)];
 }
