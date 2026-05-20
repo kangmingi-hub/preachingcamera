@@ -57,8 +57,7 @@ export const HTML = `<!DOCTYPE html>
   </div>
   <div class="count-row">
     <button class="count-btn" onclick="addCount(-1)">－</button>
-    <button class="count-btn" onclick="addCount(1)">＋ 전도</button>
-    <button class="count-btn" onclick="addCount(1)">＋</button>
+<button class="count-btn" onclick="addCount(1)" style="white-space:nowrap;width:80px;">＋ 전도</button>    <button class="count-btn" onclick="addCount(1)">＋</button>
   </div>
   <button class="btn-ar" id="ar-btn" disabled onclick="startGacha()">🔒 목표 달성 후 인증샷</button>
   <button class="manage-btn" onclick="showScreen('char-screen')">⚙ 캐릭터 관리</button>
