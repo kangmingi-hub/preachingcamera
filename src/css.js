@@ -10,16 +10,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'No
 .home-icon{font-size:80px;animation:float 3s ease-in-out infinite;z-index:1;margin-bottom:8px;filter:drop-shadow(0 0 24px rgba(255,215,0,.8))}
 @keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-16px) rotate(4deg)}}
 .home-title{font-family:'Black Han Sans',sans-serif;font-size:clamp(24px,8vw,40px);background:linear-gradient(135deg,#fff 0%,var(--gold) 50%,var(--gold2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;z-index:1;filter:drop-shadow(0 2px 12px rgba(255,215,0,.5));line-height:1.3;padding:0 20px}
-.home-sub{font-size:13px;color:rgba(255,255,255,.5);margin:6px 0 22px;z-index:1;letter-spacing:.5px}
-.member-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.25);border-radius:20px;padding:18px 22px;width:min(320px,88vw);z-index:1;margin-bottom:18px}
-.member-box h3{font-size:12px;color:var(--gold);letter-spacing:.5px;margin-bottom:12px}
+.member-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.25);border-radius:20px;padding:14px 18px;width:min(320px,88vw);z-index:1;margin-bottom:10px}.member-box h3{font-size:12px;color:var(--gold);letter-spacing:.5px;margin-bottom:12px}
 .member-btns{display:flex;gap:8px;justify-content:center}
 .mbtn{flex:1;padding:10px 0;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);font-size:14px;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif}
 .mbtn.selected{background:rgba(255,215,0,.15);border-color:var(--gold);color:var(--gold);font-weight:700}
 .member-goal{text-align:center;font-size:12px;color:rgba(255,255,255,.45);margin-top:10px}
 .member-goal span{color:var(--gold);font-weight:700;font-size:15px}
-.prog-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.2);border-radius:20px;padding:16px 22px;width:min(320px,88vw);z-index:1;margin-bottom:22px}
-.prog-top{display:flex;justify-content:space-between;font-size:12px;color:var(--gold);margin-bottom:8px}
+.prog-wrap{background:rgba(255,255,255,.06);border:1px solid rgba(255,215,0,.2);border-radius:20px;padding:14px 18px;width:min(320px,88vw);z-index:1;margin-bottom:12px}.prog-top{display:flex;justify-content:space-between;font-size:12px;color:var(--gold);margin-bottom:8px}
 .prog-bg{background:rgba(255,255,255,.1);border-radius:99px;height:12px;overflow:hidden}
 .prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold2),var(--gold));box-shadow:0 0 10px rgba(255,215,0,.5);transition:width .7s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden}
 .prog-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shimmer 2s infinite}
@@ -28,8 +25,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'No
 .prog-nums .cur{font-size:28px;font-family:'Black Han Sans',sans-serif;color:var(--gold)}
 .prog-nums .sep{color:rgba(255,255,255,.3)}
 .prog-nums .tot{font-size:16px;color:rgba(255,255,255,.5)}
-.count-row{display:flex;gap:12px;z-index:1;margin-bottom:18px}
-.count-btn{width:52px;height:52px;border-radius:50%;font-size:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:white;cursor:pointer;transition:all .15s}
+.count-row{display:flex;gap:12px;z-index:1;margin-bottom:12px}.count-btn{width:52px;height:52px;border-radius:50%;font-size:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:white;cursor:pointer;transition:all .15s}
 .count-btn:active{transform:scale(.9);background:rgba(255,255,255,.18)}
 .btn-ar{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a0800;font-family:'Black Han Sans',sans-serif;font-size:18px;border:none;border-radius:99px;padding:14px 40px;cursor:pointer;z-index:1;box-shadow:0 4px 24px rgba(255,165,0,.5);transition:transform .15s,box-shadow .15s;letter-spacing:.5px}
 .btn-ar:active{transform:scale(.96)}
