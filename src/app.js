@@ -194,16 +194,15 @@ function updateHomeUI() {
 function injectHomeUserBar(user) {
   const home=document.getElementById('home'); if(!home) return;
   const bar=document.createElement('div');
-  bar.style.cssText='position:absolute;top:14px;left:18px;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:6px;';
+bar.style.cssText='position:absolute;top:14px;left:0;right:0;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;padding:0 18px;';
   bar.innerHTML=`
-    <div style="display:flex;align-items:center;gap:6px;">
+    <div style="display:flex;flex-direction:column;align-items:flex-start;gap:6px;">
       <div style="font-size:13px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.08);border-radius:99px;padding:5px 13px;">👤 <span style="color:#FFD700;font-weight:700;">${user.nickname}</span></div>
-      <button onclick="doLogout()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">로그아웃</button>
-      <button onclick="showChangePw()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">🔑 비번변경</button>
-    </div>
-    <div style="display:flex;gap:6px;">
       <button onclick="location.href='/collection'" style="font-size:11px;color:#FFD700;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);border-radius:99px;padding:5px 11px;cursor:pointer;">📖 내 도감</button>
-    </div>`;
+      <div id="home-btn-row"></div>
+    </div>
+    <button onclick="showChangePw()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">🔑 비번변경</button>
+    <button onclick="doLogout()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">로그아웃</button>`;
   home.appendChild(bar);
 }
 
