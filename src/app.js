@@ -161,6 +161,7 @@ function confirmTeam() {
   saveState();
   showScreen('home');
   updateHomeUI();
+  document.getElementById('home').style.display='flex';
 }
 
 // ── 홈 ──
