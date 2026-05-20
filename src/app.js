@@ -190,12 +190,24 @@ function injectHomeUserBar(user) {
   const home=document.getElementById('home'); if(!home) return;
   const bar=document.createElement('div');
   bar.style.cssText='position:absolute;top:14px;left:0;right:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:0 18px;';
-  bar.innerHTML=`<div style="font-size:13px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.08);border-radius:99px;padding:5px 13px;">👤 <span style="color:#FFD700;font-weight:700;">${user.nickname}</span></div><button onclick="doLogout()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">로그아웃</button>`;
+  bar.innerHTML=`<div style="font-size:13px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.08);border-radius:99px;padding:5px 13px;">👤 <span style="color:#FFD700;font-weight:700;">${user.nickname}</span></div>
+  <button onclick="showChangePw()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">🔑 비밀번호변경</button>
+  <button onclick="doLogout()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">로그아웃</button>`;
   home.appendChild(bar);
   const colBtn=document.createElement('button');
   colBtn.textContent='📖 내 도감'; colBtn.onclick=()=>location.href='/collection';
   colBtn.style.cssText='position:absolute;bottom:56px;right:20px;z-index:1;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);color:#FFD700;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';
   home.appendChild(colBtn);
+}
+
+function showChangePw(){
+  const newPw=prompt('새 비밀번호 입력 (4자 이상)');
+  if(!newPw||newPw.length<4){showToast('4자 이상 입력하세요');return;}
+  sb.from('users').update({password:newPw}).eq('id',arUser.id)
+    .then(({error})=>{
+      if(error){showToast('❌ 변경 실패');return;}
+      showToast('✅ 비밀번호 변경됐어요!');
+    });
 }
 
 // ── 가챠 ──
@@ -425,7 +437,16 @@ async function initApp(){
   } else {
     showScreen('team-screen');
   }
-  if(arUser) injectHomeUserBar(arUser);
+ if(arUser){
+  const{data:me}=await sb.from('users').select('role').eq('id',arUser.id).single();
+  if(me) { arUser.role=me.role; localStorage.setItem('ar_user',JSON.stringify(arUser)); }
+  injectHomeUserBar(arUser);
+  if(arUser.role==='admin'){
+    const btn=document.createElement('button');
+    btn.textContent='⚙️ 관리자'; btn.onclick=()=>location.href='/admin';
+    btn.style.cssText='position:absolute;bottom:100px;right:20px;z-index:1;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);color:#ff8888;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';
+    document.getElementById('home').appendChild(btn);
+  }
 }
 
 window.addEventListener('DOMContentLoaded', initApp);
