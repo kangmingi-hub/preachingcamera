@@ -1,9 +1,8 @@
 // ⚠️ 이 파일은 build.js가 자동 생성합니다
-// CI에서 build.js 실행 후 이 파일을 덮어씁니다
-
 const MAIN_HTML = "PLACEHOLDER_MAIN";
 const LOGIN_HTML = "PLACEHOLDER_LOGIN";
 const COLLECTION_HTML = "PLACEHOLDER_COLLECTION";
+const ADMIN_HTML = "PLACEHOLDER_ADMIN"; // ← 추가
 
 export default {
   async fetch(request) {
@@ -15,6 +14,11 @@ export default {
     }
     if (pathname === '/collection' || pathname === '/collection.html') {
       return new Response(COLLECTION_HTML, {
+        headers: { 'Content-Type': 'text/html;charset=UTF-8', 'Cache-Control': 'no-cache' },
+      });
+    }
+    if (pathname === '/admin' || pathname === '/admin.html') { // ← 추가
+      return new Response(ADMIN_HTML, {
         headers: { 'Content-Type': 'text/html;charset=UTF-8', 'Cache-Control': 'no-cache' },
       });
     }
