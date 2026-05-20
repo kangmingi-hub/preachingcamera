@@ -183,8 +183,12 @@ function updateHomeUI() {
     names.textContent = all.join(', ');
   }
   const btn=document.getElementById('ar-btn');
-  if(done){btn.disabled=false;btn.classList.remove('locked');btn.textContent='📸 AR 인증샷 찍기!';}
-  else{btn.disabled=!tot;btn.classList.add('locked');btn.textContent=tot?`🔒 ${tot-cur}명 더 전도하면 해금!`:'🔒 전도짝을 먼저 입력하세요';}
+  if(done){btn.disabled=false;btn.classList.remove('locked');btn.textContent='📸 AR 인증샷 찍기!';
+    } else{
+       btn.disabled=true;
+       btn.classList.add('locked');
+       btn.textContent=tot?`🔒 ${tot-cur}명 더 전도하면 해금!`:'🔒 전도짝을 먼저 입력하세요';
+  }
 }
 function injectHomeUserBar(user) {
   const home=document.getElementById('home'); if(!home) return;
