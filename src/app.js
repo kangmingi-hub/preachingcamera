@@ -292,7 +292,11 @@ async function captureAndShow() {
     const video=document.getElementById('cam-video'),char=state.currentChar,canvas=document.getElementById('result-canvas');
     const W=video.videoWidth||1280,H=video.videoHeight||720;
     canvas.width=W; canvas.height=H; const ctx=canvas.getContext('2d');
-    ctx.drawImage(video,0,0,W,H);
+   ctx.save();
+    ctx.translate(W, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(video, 0, 0, W, H);
+    ctx.restore();
     if(char){const cx=state.charX/100*W,cy=(1-state.charY/100)*H,sz=Math.min(W,H)*.28;await drawChar(ctx,char,cx,cy,sz);drawNameplate(ctx,char,cx,cy,W);drawBadge(ctx,char,W);}
     const wSz=Math.max(12,W*.018); ctx.font=wSz+'px sans-serif'; ctx.fillStyle='rgba(255,255,255,.5)'; ctx.textAlign='right'; ctx.textBaseline='bottom'; ctx.fillText('전도 AR 인증샷',W-12,H-10);
     document.getElementById('result-char-name').textContent=char?char.name:'';
