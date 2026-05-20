@@ -344,8 +344,10 @@ if(!char||!col) return;
 const box=document.getElementById('detail-box');
 box.className='detail-box '+char.grade;
 document.getElementById('detail-grade').textContent=GRADE_LABELS[char.grade];
-document.getElementById('detail-img').innerHTML=char.imgData
-?<img src="${char.imgData}" style="width:80px;height:80px;object-fit:contain;">:(char.emoji||'✨'); document.getElementById('detail-name').textContent=char.name; document.getElementById('detail-desc').textContent=char.desc||''; document.getElementById('detail-count').textContent=col.count; const d=new Date(col.first_obtained_at); document.getElementById('detail-date').textContent=``${d.getMonth()+1}/${d.getDate()};
+document.getElementById('detail-img').innerHTML='<img src="'+GITHUB_IMG+char.id+'.png" style="width:80px;height:80px;object-fit:contain;" onerror="this.style.display=\'none\'">';
+  document.getElementById('detail-name').textContent=char.name; document.getElementById('detail-desc').textContent=char.desc||''; document.getElementById('detail-count').textContent=col.count; 
+  const d=new Date(col.first_obtained_at); 
+  document.getElementById('detail-date').textContent=(d.getMonth()+1)+'/'+d.getDate();
 document.getElementById('detail-overlay').classList.add('open');
 }
 
