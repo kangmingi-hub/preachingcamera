@@ -96,9 +96,10 @@ export const HTML = `<!DOCTYPE html>
     <div class="ar-char-nameplate" id="ar-char-nameplate">캐릭터</div>
   </div>
   <div class="ar-bottom">
-    <button class="shutter" onclick="takePhoto()"><div class="shutter-inner"></div></button>
-    <button class="ar-reroll" onclick="flipCamera()">🔄<br>카메라<br>전환</button>
-  </div>
+  <div style="width:44px"></div>
+  <button class="shutter" onclick="takePhoto()"><div class="shutter-inner"></div></button>
+  <button class="ar-reroll" onclick="flipCamera()">🔄<br>카메라<br>전환</button>
+</div>
   <div class="flash" id="flash"></div>
 </div>
 
