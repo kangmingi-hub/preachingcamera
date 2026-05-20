@@ -159,9 +159,9 @@ function confirmTeam() {
   state.members = state.partners.length + 1;
   state.goal = state.members * 10;
   saveState();
-  showScreen('home');
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('home').classList.add('active');
   updateHomeUI();
-  document.getElementById('home').style.display='flex';
 }
 
 // ── 홈 ──
