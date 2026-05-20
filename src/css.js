@@ -64,6 +64,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'No
 .btn-skip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);font-size:14px;border-radius:99px;padding:12px 20px;cursor:pointer}
 #ar-screen{background:#000}
 #cam-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+ transform: scaleX(-1); /* 좌우반전 */
 .ar-char-overlay{position:absolute;bottom:28%;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:10;animation:ar-float 2.5s ease-in-out infinite;transition:all .3s}
 @keyframes ar-float{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-14px)}}
 .ar-char-img{width:min(140px,35vw);aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 0 16px rgba(255,215,0,.8)) drop-shadow(0 4px 8px rgba(0,0,0,.6))}
