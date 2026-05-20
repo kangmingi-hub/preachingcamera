@@ -270,31 +270,44 @@ async function takePhoto() {
   const flash=document.getElementById('flash'); flash.classList.remove('bang'); void flash.offsetWidth; flash.classList.add('bang');
   setTimeout(async()=>{ await captureAndShow(); if(state.currentChar&&arUser?.id) saveToCollection(state.currentChar); },80);
 }
+
 async function captureAndShow() {
-  const video=document.getElementById('cam-video'),char=state.currentChar,canvas=document.getElementById('result-canvas');
-  const W=video.videoWidth||1280,H=video.videoHeight||720;
-  canvas.width=W; canvas.height=H; const ctx=canvas.getContext('2d');
-  ctx.drawImage(video,0,0,W,H);
-  if(char){const cx=state.charX/100*W,cy=(1-state.charY/100)*H,sz=Math.min(W,H)*.28;await drawChar(ctx,char,cx,cy,sz);drawNameplate(ctx,char,cx,cy,W);drawBadge(ctx,char,W);}
-  const wSz=Math.max(12,W*.018); ctx.font=wSz+'px sans-serif'; ctx.fillStyle='rgba(255,255,255,.5)'; ctx.textAlign='right'; ctx.textBaseline='bottom'; ctx.fillText('전도 AR 인증샷',W-12,H-10);
-  document.getElementById('result-char-name').textContent=char?char.name:'';
-  const tag=document.getElementById('result-grade-tag'); tag.className='result-grade-tag '+(char?char.grade:''); tag.textContent=char?GRADE_LABELS[char.grade]:'';
-  showScreen('result-screen');
+  try {  // ← 추가
+    const video=document.getElementById('cam-video'),char=state.currentChar,canvas=document.getElementById('result-canvas');
+    const W=video.videoWidth||1280,H=video.videoHeight||720;
+    canvas.width=W; canvas.height=H; const ctx=canvas.getContext('2d');
+    ctx.drawImage(video,0,0,W,H);
+    if(char){const cx=state.charX/100*W,cy=(1-state.charY/100)*H,sz=Math.min(W,H)*.28;await drawChar(ctx,char,cx,cy,sz);drawNameplate(ctx,char,cx,cy,W);drawBadge(ctx,char,W);}
+    const wSz=Math.max(12,W*.018); ctx.font=wSz+'px sans-serif'; ctx.fillStyle='rgba(255,255,255,.5)'; ctx.textAlign='right'; ctx.textBaseline='bottom'; ctx.fillText('전도 AR 인증샷',W-12,H-10);
+    document.getElementById('result-char-name').textContent=char?char.name:'';
+    const tag=document.getElementById('result-grade-tag'); tag.className='result-grade-tag '+(char?char.grade:''); tag.textContent=char?GRADE_LABELS[char.grade]:'';
+    showScreen('result-screen');
+  } catch(e) {  // ← 추가
+    showToast('오류 발생: '+e); // 어떤 오류인지 토스트로 보여줌
+  }
 }
+
 // ✅ 수정된 drawChar 전체
+
 async function drawChar(ctx,char,x,y,sz){
   ctx.save(); ctx.shadowColor='rgba(255,215,0,.8)'; ctx.shadowBlur=30;
   const imgUrl = GITHUB_IMG + char.id + '.png';
   try{
     const img=new Image(); img.crossOrigin='anonymous'; img.src=imgUrl;
-    await new Promise((r,j)=>{ img.onload=r; img.onerror=j; });
+    // 타임아웃 3초 추가
+    await Promise.race([
+      new Promise((r,j)=>{ img.onload=r; img.onerror=j; }),
+      new Promise((_,j)=>setTimeout(()=>j('timeout'),3000))
+    ]);
     ctx.drawImage(img,x-sz/2,y-sz,sz,sz);
   }catch(e){
+    // 실패하면 텍스트로 대체
     ctx.font=(sz*.5)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillStyle='rgba(255,255,255,.3)'; ctx.fillText('👤',x,y-sz/2);
   }
   ctx.restore();
 }
+
 function drawNameplate(ctx,char,x,y,W){
   const ny=y+14,fs=Math.max(16,W*.022),pad=14;
   ctx.font='bold '+fs+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
