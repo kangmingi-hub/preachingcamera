@@ -63,7 +63,6 @@ export const HTML = `<!DOCTYPE html>
 <button class="count-btn" onclick="addCount(1)" style="white-space:nowrap;width:80px;">＋ 전도</button>    <button class="count-btn" onclick="addCount(1)">＋</button>
   </div>
   <button class="btn-ar" id="ar-btn" disabled onclick="startGacha()">🔒 목표 달성 후 인증샷</button>
-  <button class="manage-btn" onclick="showScreen('char-screen')">⚙ 캐릭터 관리</button>
 </div>
 
 <!-- GACHA -->
@@ -118,38 +117,6 @@ export const HTML = `<!DOCTYPE html>
   <button class="btn-home" onclick="goHome()">🏠 홈으로</button>
 </div>
 
-<!-- CHARACTER MANAGER -->
-<div id="char-screen" class="screen">
-  <div class="char-screen-header">
-    <h2>⚙ 캐릭터 관리</h2>
-    <button class="btn-back" onclick="showScreen('home')">← 뒤로</button>
-  </div>
-  <div class="char-add-box">
-    <h3>+ 새 캐릭터 추가</h3>
-    <div class="char-form-row"><input type="text" id="char-name-input" placeholder="캐릭터 이름"></div>
-    <div class="char-form-row">
-      <select id="char-grade-select">
-        <option value="common">⭐ COMMON (60%)</option>
-        <option value="rare">⭐⭐ RARE (25%)</option>
-        <option value="epic">⭐⭐⭐ EPIC (10%)</option>
-        <option value="legend">🌟 LEGEND (5%)</option>
-      </select>
-    </div>
-    <div class="char-img-row">
-      <div class="img-upload-btn" onclick="document.getElementById('char-file-input').click()">📷 이미지 업로드 (선택)</div>
-      <input type="file" id="char-file-input" accept="image/*" onchange="previewImg(this)" style="display:none">
-      <img id="img-preview-el" class="img-preview" style="display:none">
-    </div>
-    <div style="margin-top:8px;">
-      <input type="text" id="char-emoji-input" placeholder="또는 이모지 입력 (예: 👼)"
-        style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 12px;color:white;font-size:14px;outline:none;width:100%;">
-    </div>
-    <div style="margin-top:10px;">
-      <button class="char-add-btn" onclick="addCharacter()" style="width:100%">추가하기</button>
-    </div>
-  </div>
-  <div class="char-list" id="char-list"></div>
-</div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modal">
