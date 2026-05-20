@@ -452,8 +452,8 @@ async function initApp(){
   loadState();
   state.count=0;
   saveState();
-  
-  // Supabase에서 최신 캐릭터 목록 불러오기
+
+  // Supabase 캐릭터 불러오기
   const{data:chars}=await sb.from('characters').select('*').order('created_at');
   if(chars&&chars.length>0){
     state.characters=chars.map(c=>({
@@ -463,18 +463,21 @@ async function initApp(){
     saveState();
   }
 
- showScreen('team-screen');
-updateHomeUI();
- if(arUser){
-  const{data:me}=await sb.from('users').select('role').eq('id',arUser.id).single();
-  if(me) { arUser.role=me.role; localStorage.setItem('ar_user',JSON.stringify(arUser)); }
-  injectHomeUserBar(arUser);
-  if(arUser.role==='admin'){
-    const btn=document.createElement('button');
-    btn.textContent='⚙️ 관리자'; btn.onclick=()=>location.href='/admin';
-btn.style.cssText='position:absolute;bottom:130px;right:20px;z-index:1;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);color:#ff8888;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';    document.getElementById('home').appendChild(btn);
+  // 유저 role 불러오기 및 홈 버튼 주입
+  if(arUser){
+    const{data:me}=await sb.from('users').select('role').eq('id',arUser.id).single();
+    if(me){ arUser.role=me.role; localStorage.setItem('ar_user',JSON.stringify(arUser)); }
+    injectHomeUserBar(arUser);
+    if(arUser.role==='admin'){
+      const btn=document.createElement('button');
+      btn.textContent='⚙️ 관리자'; btn.onclick=()=>location.href='/admin';
+      btn.style.cssText='position:absolute;bottom:130px;right:20px;z-index:1;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);color:#ff8888;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';
+      document.getElementById('home').appendChild(btn);
+    }
   }
- }
-}  
+
+  // 항상 전도짝 입력 화면으로 시작
+  showScreen('team-screen');
+}
 
 window.addEventListener('DOMContentLoaded', initApp);
