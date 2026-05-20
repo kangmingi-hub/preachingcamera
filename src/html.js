@@ -71,8 +71,7 @@ export const HTML = `<!DOCTYPE html>
   <div class="particles" id="particles"></div>
   <div class="gacha-card" id="gacha-card">
     <span class="gacha-grade-badge" id="gacha-badge">COMMON</span>
-    <div id="gacha-char-display"></div>
-    <div class="gacha-char-name" id="gacha-char-name">???</div>
+<div id="gacha-char-display" style="width:100%;display:flex;justify-content:center;align-items:center;"></div>    <div class="gacha-char-name" id="gacha-char-name">???</div>
     <div class="gacha-char-desc" id="gacha-char-desc"></div>
   </div>
   <div class="gacha-btns">
