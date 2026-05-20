@@ -96,7 +96,6 @@ export const HTML = `<!DOCTYPE html>
     <div class="ar-char-nameplate" id="ar-char-nameplate">캐릭터</div>
   </div>
   <div class="ar-bottom">
-    <button class="ar-reroll" onclick="rerollCharacter()">🎲<br>다시<br>뽑기</button>
     <button class="shutter" onclick="takePhoto()"><div class="shutter-inner"></div></button>
     <button class="ar-reroll" onclick="flipCamera()">🔄<br>카메라<br>전환</button>
   </div>
