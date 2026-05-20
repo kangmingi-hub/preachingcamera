@@ -84,7 +84,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'No
 .ar-char-overlay.draggable{cursor:grab;pointer-events:all}
 .ar-char-overlay.dragging{cursor:grabbing;animation:none}
 .ar-bottom{position:absolute;bottom:0;left:0;right:0;z-index:20;padding:16px 28px 38px;background:linear-gradient(to top,rgba(0,0,0,.75),transparent);display:flex;align-items:center;justify-content:space-between}
-.ar-tip{font-size:11px;color:rgba(255,255,255,.6);max-width:100px;line-height:1.5}
+@media (orientation:landscape){.ar-bottom{top:0;bottom:0;left:auto;right:0;width:100px;flex-direction:column;justify-content:center;padding:20px 16px;background:linear-gradient(to left,rgba(0,0,0,.75),transparent);}}.ar-tip{font-size:11px;color:rgba(255,255,255,.6);max-width:100px;line-height:1.5}
 .shutter{width:70px;height:70px;border-radius:50%;background:white;border:4px solid rgba(255,255,255,.35);box-shadow:0 0 0 6px rgba(255,255,255,.12);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .1s}
 .shutter:active{transform:scale(.88)}
 .shutter-inner{width:58px;height:58px;border-radius:50%;background:#f0f0f0}
