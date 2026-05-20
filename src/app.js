@@ -200,8 +200,7 @@ function injectHomeUserBar(user) {
   home.appendChild(bar);
   const colBtn=document.createElement('button');
   colBtn.textContent='📖 내 도감'; colBtn.onclick=()=>location.href='/collection';
-  colBtn.style.cssText='position:absolute;bottom:56px;right:20px;z-index:1;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);color:#FFD700;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';
-  home.appendChild(colBtn);
+colBtn.style.cssText='position:absolute;bottom:90px;right:20px;z-index:1;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);color:#FFD700;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';  home.appendChild(colBtn);
 }
 
 function showChangePw(){
@@ -474,8 +473,7 @@ async function initApp(){
   if(arUser.role==='admin'){
     const btn=document.createElement('button');
     btn.textContent='⚙️ 관리자'; btn.onclick=()=>location.href='/admin';
-    btn.style.cssText='position:absolute;bottom:100px;right:20px;z-index:1;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);color:#ff8888;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';
-    document.getElementById('home').appendChild(btn);
+btn.style.cssText='position:absolute;bottom:130px;right:20px;z-index:1;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);color:#ff8888;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';    document.getElementById('home').appendChild(btn);
   }
  }
 }  
