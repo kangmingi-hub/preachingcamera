@@ -58,6 +58,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Not
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/kangmingi-hub/preachingcamera/main/icon-192.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0a0a2e">
 <script>
 const SUPA_URL='https://ouugfofqiefrbfshgeep.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im91dWdmb2ZxaWVmcmJmc2hnZWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNzgyODUsImV4cCI6MjA5NDc1NDI4NX0.5wlvTtlLPPQ8C5JF8dwzB1Rgo2rGf1oniF9wasZLi6g';
