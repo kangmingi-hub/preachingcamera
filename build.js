@@ -25,6 +25,22 @@ const ADMIN_HTML      = ${JSON.stringify(adminHTML)}; // ← 추가
 export default {
   async fetch(request) {
     const { pathname } = new URL(request.url);
+    if (pathname === '/manifest.json') {
+      return new Response(JSON.stringify({
+        name: '전도 AR 인증샷',
+        short_name: '전도AR',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#0a0a2e',
+        theme_color: '#0a0a2e',
+        icons: [
+          { src: 'https://raw.githubusercontent.com/kangmingi-hub/preachingcamera/main/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'https://raw.githubusercontent.com/kangmingi-hub/preachingcamera/main/icon-512.png', sizes: '512x512', type: 'image/png' }
+        ]
+      }), {
+        headers: { 'Content-Type': 'application/manifest+json', 'Cache-Control': 'public, max-age=300' }
+      });
+    }
     if (pathname === '/login' || pathname === '/login.html') {
       return new Response(LOGIN_HTML, {
         headers: { 'Content-Type': 'text/html;charset=UTF-8', 'Cache-Control': 'public, max-age=300' },
