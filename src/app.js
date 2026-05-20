@@ -241,8 +241,7 @@ function startGacha() {
   document.getElementById('gacha-char-name').textContent=char.name;
   document.getElementById('gacha-char-desc').textContent=char.desc||'';
   const disp=document.getElementById('gacha-char-display');
-  disp.innerHTML=char.imgData?`<img src="${char.imgData}" class="gacha-char-img">`:`<div class="gacha-char-emoji">${char.emoji||'✨'}</div>`;
-  card.style.animation='none'; void card.offsetWidth; card.style.animation='';
+disp.innerHTML=`<img src="${GITHUB_IMG+char.id+'.png'}" class="gacha-char-img" onerror="this.style.display='none'">`;  card.style.animation='none'; void card.offsetWidth; card.style.animation='';
   spawnParticles(char.grade); showScreen('gacha-screen');
 }
 function spawnParticles(grade) {
@@ -277,8 +276,7 @@ function renderARChar() {
   const hud=document.getElementById('hud-grade'); hud.className='hud-grade '+char.grade; hud.textContent=GRADE_LABELS[char.grade];
   document.getElementById('ar-grade-ring').className='ar-grade-ring '+char.grade;
   const disp=document.getElementById('ar-char-display');
-  disp.innerHTML=char.imgData?`<img src="${char.imgData}" class="ar-char-img">`:`<div class="ar-char-emoji">${char.emoji||'✨'}</div>`;
-  document.getElementById('ar-char-nameplate').textContent=char.name;
+disp.innerHTML=`<img src="${GITHUB_IMG+char.id+'.png'}" class="ar-char-img" onerror="this.style.display='none'">`;  document.getElementById('ar-char-nameplate').textContent=char.name;
   const ov=document.getElementById('ar-char-overlay'); ov.style.bottom=state.charY+'%'; ov.style.left=state.charX+'%';
 }
 function setupDrag() {
