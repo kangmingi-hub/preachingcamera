@@ -307,8 +307,13 @@ async function captureAndShow() {
     ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0, W, H);
     ctx.restore();
-    if(char){const cx=state.charX/100*W,cy=(1-state.charY/100)*H,sz=Math.min(W,H)*.28;await drawChar(ctx,char,cx,cy,sz);drawNameplate(ctx,char,cx,cy,W);drawBadge(ctx,char,W);}
-    const wSz=Math.max(12,W*.018); ctx.font=wSz+'px sans-serif'; ctx.fillStyle='rgba(255,255,255,.5)'; ctx.textAlign='right'; ctx.textBaseline='bottom'; ctx.fillText('전도 AR 인증샷',W-12,H-10);
+if(char){
+  const cx=state.charX/100*W,cy=(1-state.charY/100)*H;
+  const sz=Math.min(W,H)*.28;
+  await drawChar(ctx,char,cx,cy,sz);
+  drawNameplate(ctx,char,cx,cy,W);
+  drawBadge(ctx,char,W);
+}    const wSz=Math.max(12,W*.018); ctx.font=wSz+'px sans-serif'; ctx.fillStyle='rgba(255,255,255,.5)'; ctx.textAlign='right'; ctx.textBaseline='bottom'; ctx.fillText('전도 AR 인증샷',W-12,H-10);
     document.getElementById('result-char-name').textContent=char?char.name:'';
     const tag=document.getElementById('result-grade-tag'); tag.className='result-grade-tag '+(char?char.grade:''); tag.textContent=char?GRADE_LABELS[char.grade]:'';
     showScreen('result-screen');
@@ -329,8 +334,9 @@ async function drawChar(ctx,char,x,y,sz){
       new Promise((r,j)=>{ img.onload=r; img.onerror=j; }),
       new Promise((_,j)=>setTimeout(()=>j('timeout'),3000))
     ]);
-    ctx.drawImage(img,x-sz/2,y-sz,sz,sz);
-  }catch(e){
+const ratio=img.naturalWidth/img.naturalHeight||1;
+const dw=sz,dh=sz/ratio;
+ctx.drawImage(img,x-dw/2,y-dh,dw,dh);  }catch(e){
     // 실패하면 텍스트로 대체
     ctx.font=(sz*.5)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillStyle='rgba(255,255,255,.3)'; ctx.fillText('👤',x,y-sz/2);
