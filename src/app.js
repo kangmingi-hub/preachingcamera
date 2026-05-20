@@ -194,14 +194,17 @@ function updateHomeUI() {
 function injectHomeUserBar(user) {
   const home=document.getElementById('home'); if(!home) return;
   const bar=document.createElement('div');
-  bar.style.cssText='position:absolute;top:14px;left:0;right:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:0 18px;';
-  bar.innerHTML=`<div style="font-size:13px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.08);border-radius:99px;padding:5px 13px;">👤 <span style="color:#FFD700;font-weight:700;">${user.nickname}</span></div>
-  <button onclick="showChangePw()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">🔑 비밀번호변경</button>
-  <button onclick="doLogout()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">로그아웃</button>`;
+  bar.style.cssText='position:absolute;top:14px;left:18px;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:6px;';
+  bar.innerHTML=`
+    <div style="display:flex;align-items:center;gap:6px;">
+      <div style="font-size:13px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.08);border-radius:99px;padding:5px 13px;">👤 <span style="color:#FFD700;font-weight:700;">${user.nickname}</span></div>
+      <button onclick="doLogout()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">로그아웃</button>
+      <button onclick="showChangePw()" style="font-size:11px;color:rgba(255,255,255,.35);background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 11px;cursor:pointer;">🔑 비번변경</button>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <button onclick="location.href='/collection'" style="font-size:11px;color:#FFD700;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);border-radius:99px;padding:5px 11px;cursor:pointer;">📖 내 도감</button>
+    </div>`;
   home.appendChild(bar);
-  const colBtn=document.createElement('button');
-  colBtn.textContent='📖 내 도감'; colBtn.onclick=()=>location.href='/collection';
-colBtn.style.cssText='position:absolute;bottom:90px;right:20px;z-index:1;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);color:#FFD700;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';  home.appendChild(colBtn);
 }
 
 function showChangePw(){
@@ -438,8 +441,11 @@ async function initApp(){
     if(arUser.role==='admin'){
       const btn=document.createElement('button');
       btn.textContent='⚙️ 관리자'; btn.onclick=()=>location.href='/admin';
-      btn.style.cssText='position:absolute;bottom:130px;right:20px;z-index:1;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);color:#ff8888;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';
-      document.getElementById('home').appendChild(btn);
+      btn.style.cssText='font-size:11px;color:#ff8888;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);border-radius:99px;padding:5px 11px;cursor:pointer;';
+        // 내 도감 버튼 옆에 추가
+        const btnRow=document.querySelector('#home [style*="display:flex;gap:6px"]');
+        if(btnRow) btnRow.appendChild(btn);
+        else document.getElementById('home').appendChild(btn);
     }
   }
 
