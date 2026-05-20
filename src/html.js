@@ -11,6 +11,9 @@ export const HTML = `<!DOCTYPE html>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;700&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/kangmingi-hub/preachingcamera/main/icon-192.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0a0a2e">
 <style>${CSS}</style>
 </head>
 <body>
