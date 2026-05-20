@@ -447,6 +447,7 @@ async function initApp(){
     btn.style.cssText='position:absolute;bottom:100px;right:20px;z-index:1;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);color:#ff8888;font-size:12px;border-radius:99px;padding:7px 14px;cursor:pointer;';
     document.getElementById('home').appendChild(btn);
   }
-}
+ }
+}  
 
 window.addEventListener('DOMContentLoaded', initApp);
