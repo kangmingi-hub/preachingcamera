@@ -294,7 +294,13 @@ function rerollCharacter() { state.currentChar=rollCharacter(); renderARChar(); 
 // ── 사진 ──
 async function takePhoto() {
   const flash=document.getElementById('flash'); flash.classList.remove('bang'); void flash.offsetWidth; flash.classList.add('bang');
-  setTimeout(async()=>{ await captureAndShow(); if(state.currentChar&&arUser?.id) saveToCollection(state.currentChar); },80);
+  setTimeout(async()=>{ 
+    await captureAndShow(); 
+    if(state.currentChar&&arUser?.id) saveToCollection(state.currentChar);
+    // 인증샷 찍으면 카운트 초기화
+    state.count=0;
+    saveState();
+  },80);
 }
 
 async function captureAndShow() {
