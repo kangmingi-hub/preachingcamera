@@ -440,11 +440,10 @@ async function initApp(){
     if(arUser.role==='admin'){
       const btn=document.createElement('button');
       btn.textContent='⚙️ 관리자'; btn.onclick=()=>location.href='/admin';
-      btn.style.cssText='font-size:11px;color:#ff8888;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);border-radius:99px;padding:5px 11px;cursor:pointer;';
-        // 내 도감 버튼 옆에 추가
-        const btnRow=document.querySelector('#home [style*="display:flex;gap:6px"]');
-        if(btnRow) btnRow.appendChild(btn);
-        else document.getElementById('home').appendChild(btn);
+     btn.style.cssText='font-size:11px;color:#ff8888;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);border-radius:99px;padding:5px 11px;cursor:pointer;';
+      const btnRow=document.getElementById('home-btn-row');
+      if(btnRow) btnRow.appendChild(btn);
+      else document.getElementById('home').appendChild(btn);
     }
   }
 
