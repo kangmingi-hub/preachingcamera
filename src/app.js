@@ -449,7 +449,12 @@ async function saveToCollection(char){
 // ── 초기화 ──
 async function initApp(){
   loadState();
-
+  state.count=0;
+  state.partners=[];
+  state.members=0;
+  state.goal=0;
+  saveState();
+  
   // Supabase에서 최신 캐릭터 목록 불러오기
   const{data:chars}=await sb.from('characters').select('*').order('created_at');
   if(chars&&chars.length>0){
