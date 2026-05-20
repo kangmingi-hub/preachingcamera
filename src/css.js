@@ -51,8 +51,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'No
 .rare .gacha-grade-badge{background:rgba(170,136,255,.2);color:var(--rare-c);border:1px solid var(--rare-c)}
 .epic .gacha-grade-badge{background:rgba(255,153,0,.2);color:var(--epic-c);border:1px solid var(--epic-c)}
 .legend .gacha-grade-badge{background:rgba(255,215,0,.2);color:var(--legend-c);border:1px solid var(--legend-c)}
-.gacha-char-img{width:70%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 0 20px rgba(255,255,255,.4));animation:pulse-glow 2s ease-in-out infinite;display:block;margin:0 auto;}.gacha-char-emoji{font-size:90px;animation:pulse-glow 2s ease-in-out infinite}
-@keyframes pulse-glow{0%,100%{filter:drop-shadow(0 0 10px rgba(255,215,0,.4))}50%{filter:drop-shadow(0 0 30px rgba(255,215,0,.8))}}
+.gacha-char-img{width:88%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 0 20px rgba(255,255,255,.4));animation:pulse-glow 2s ease-in-out infinite;display:block;margin:0 auto;}@keyframes pulse-glow{0%,100%{filter:drop-shadow(0 0 10px rgba(255,215,0,.4))}50%{filter:drop-shadow(0 0 30px rgba(255,215,0,.8))}}
 .gacha-char-name{font-family:'Black Han Sans',sans-serif;font-size:18px;color:white;margin-top:10px;text-align:center;padding:0 16px}
 .gacha-char-desc{font-size:11px;color:rgba(255,255,255,.55);margin-top:4px;text-align:center;padding:0 14px;line-height:1.5}
 .particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
