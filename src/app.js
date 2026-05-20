@@ -450,9 +450,6 @@ async function saveToCollection(char){
 async function initApp(){
   loadState();
   state.count=0;
-  state.partners=[];
-  state.members=0;
-  state.goal=0;
   saveState();
   
   // Supabase에서 최신 캐릭터 목록 불러오기
@@ -465,12 +462,7 @@ async function initApp(){
     saveState();
   }
 
-  if(state.partners.length>0){
-    showScreen('home');
-    updateHomeUI();
-  } else {
-    showScreen('team-screen');
-  }
+ showScreen('team-screen');
  if(arUser){
   const{data:me}=await sb.from('users').select('role').eq('id',arUser.id).single();
   if(me) { arUser.role=me.role; localStorage.setItem('ar_user',JSON.stringify(arUser)); }
