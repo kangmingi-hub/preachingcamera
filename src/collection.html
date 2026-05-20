@@ -318,13 +318,20 @@ const col=myCollection.find(c=>c.character_id===char.id);
 if(col){
 // 획득한 카드
 const img=`<img src="${GITHUB_IMG}${char.id}.png" class="char-img" alt="${char.name}" onerror="this.style.display='none'">`;
- return<div class="card unlocked ${char.grade}" onclick="openDetail('${char.id}')">
+return '<div class="card unlocked '+char.grade+'" onclick="openDetail(\''+char.id+'\')">'
++'<div class="card-grade-badge">'+char.grade.toUpperCase()+'</div>'
++'<div class="card-count">×'+col.count+'</div>'
++img
++'<div class="card-name">'+char.name+'</div>'
++'</div>';
 <div class="card-grade-badge">${char.grade.toUpperCase()}&lt;/div&gt; &lt;div class="card-count"&gt;×${col.count}</div>
 ${img} &lt;div class="card-name"&gt;${char.name}</div>
-</div>; } else { // 미획득 카드 (실루엣) const gradeColors={common:'#88aacc',rare:'#aa88ff',epic:'#ff9900',legend:'#FFD700'}; return<div class="card locked">
-<div class="silhouette">🫥</div>
-<div class="card-name">???</div>
-<div class="card-grade-dot" style="background:${gradeColors[char.grade]}"&gt;&lt;/div&gt; &lt;/div>;
+</div>; } else { // 미획득 카드 (실루엣) const gradeColors={common:'#88aacc',rare:'#aa88ff',epic:'#ff9900',legend:'#FFD700'}; 
+  return '<div class="card locked">'
++'<div class="silhouette">🫥</div>'
++'<div class="card-name">???</div>'
++'<div class="card-grade-dot" style="background:'+gradeColors[char.grade]+'"></div>'
++'</div>';
 }
 }).join('');
 }
