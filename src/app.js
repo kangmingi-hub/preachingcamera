@@ -161,11 +161,11 @@ function confirmTeam() {
   state.members = state.partners.length + 1;
   state.goal = state.members * 10;
   saveState();
-
-   document.getElementById('team-screen').style.display = 'none';
-  document.getElementById('home').style.display = 'flex';
+  
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('home').classList.add('active');
   updateHomeUI();
-}
+
  
 // ── 홈 ──
 function addCount(d) {
@@ -442,14 +442,6 @@ async function saveToCollection(char){
 
 // ── 초기화 ──
 async function initApp(){
-
- document.querySelectorAll('.btn-ar, .btn-goto-cam, .btn-skip, .shutter').forEach(btn => {
-    btn.addEventListener('touchend', function(e) {
-      e.preventDefault();
-      const onclickAttr = this.getAttribute('onclick');
-      if (onclickAttr) eval(onclickAttr);
-    });
-  });
   
   loadState();
   state.count=0;
