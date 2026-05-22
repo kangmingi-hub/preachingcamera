@@ -424,6 +424,14 @@ async function saveToCollection(char){
 
 // ── 초기화 ──
 async function initApp(){
+
+ document.querySelectorAll('.btn-ar, .btn-goto-cam, .btn-skip, .shutter').forEach(btn => {
+    btn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      this.click();
+    });
+  });
+  
   loadState();
   state.count=0;
   saveState();
