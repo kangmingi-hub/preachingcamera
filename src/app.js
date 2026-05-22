@@ -432,7 +432,8 @@ async function initApp(){
  document.querySelectorAll('.btn-ar, .btn-goto-cam, .btn-skip, .shutter').forEach(btn => {
     btn.addEventListener('touchend', function(e) {
       e.preventDefault();
-      this.click();
+      const onclickAttr = this.getAttribute('onclick');
+      if (onclickAttr) eval(onclickAttr);
     });
   });
   
