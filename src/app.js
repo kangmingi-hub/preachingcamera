@@ -161,8 +161,7 @@ function confirmTeam() {
   state.members = state.partners.length + 1;
   state.goal = state.members * 10;
   saveState();
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('home').classList.add('active');
+  showScreen('home');
   updateHomeUI();
 }
 
