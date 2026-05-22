@@ -359,8 +359,7 @@ async function captureAndShow() {
 
 async function drawChar(ctx,char,x,y,sz){
   ctx.save(); ctx.shadowColor='rgba(255,215,0,.8)'; ctx.shadowBlur=30;
-  const imgUrl = GITHUB_IMG + char.id + '.png';
-  try{
+  const imgUrl = 'https://corsproxy.io/?' + encodeURIComponent(GITHUB_IMG + char.id + '.png');  try{
     const img=new Image(); img.crossOrigin='anonymous'; img.src=imgUrl;
     // 타임아웃 3초 추가
     await Promise.race([
