@@ -393,30 +393,7 @@ function drawBadge(ctx,char,W){
   ctx.fillStyle=gc[char.grade]||'#FFD700'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,bx+bw/2,by+fs*.9);
 }
 function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
-
-function savePhoto(){
-  const canvas = document.getElementById('result-canvas');
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  try {
-    const dataUrl = canvas.toDataURL('image/png');
-    if (isIOS) {
-      const win = window.open();
-      win.document.write(`<html><body style="margin:0;background:#000;text-align:center;"><p style="color:#fff;padding:16px;font-size:16px;">📸 이미지를 <b>길게 눌러서</b> 저장하세요</p><img src="${dataUrl}" style="max-width:100vw;"></body></html>`);
-      showToast('이미지를 길게 눌러 저장해주세요!');
-    } else {
-      const l = document.createElement('a');
-      l.download = '전도인증샷_' + Date.now() + '.png';
-      l.href = dataUrl;
-      document.body.appendChild(l);
-      l.click();
-      document.body.removeChild(l);
-      showToast('📸 사진이 저장되었습니다!');
-    }
-  } catch(e) {
-    showToast('❌ 저장 실패: 이미지 오류');
-  }
-}
-
+function savePhoto(){const c=document.getElementById('result-canvas');const l=document.createElement('a');l.download='전도인증샷_'+Date.now()+'.png';l.href=c.toDataURL('image/png');l.click();showToast('📸 사진이 저장되었습니다!');}
 function retakePhoto(){showScreen('ar-screen');if(!state.stream)startCamera().then(()=>{renderARChar();setupDrag();});}
 function goHome(){stopStream();showScreen('home');updateHomeUI();}
 
