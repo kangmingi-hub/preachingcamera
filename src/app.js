@@ -311,29 +311,47 @@ async function takePhoto() {
 }
 
 async function captureAndShow() {
-  try {  // ← 추가
-    const video=document.getElementById('cam-video'),char=state.currentChar,canvas=document.getElementById('result-canvas');
-    const W=video.videoWidth||1280,H=video.videoHeight||720;
-    canvas.width=W; canvas.height=H; const ctx=canvas.getContext('2d');
-ctx.save();
-    if(state.facingMode==='user'){
-      ctx.translate(W,0);
-      ctx.scale(-1,1);
+  try {
+    const video = document.getElementById('cam-video');
+    const char = state.currentChar;
+    const canvas = document.getElementById('result-canvas');
+    const W = video.videoWidth || 1280;
+    const H = video.videoHeight || 720;
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+    ctx.save();
+    if (state.facingMode === 'user') {
+      ctx.translate(W, 0);
+      ctx.scale(-1, 1);
     }
-    ctx.drawImage(video,0,0,W,H);
+    ctx.drawImage(video, 0, 0, W, H);
     ctx.restore();
-if(char){
-  const cx=state.charX/100*W,cy=(1-state.charY/100)*H;
-  const sz=Math.min(W,H)*.28;
-  await drawChar(ctx,char,cx,cy,sz);
-  drawNameplate(ctx,char,cx,cy,W);
-  drawBadge(ctx,char,W);
-}    const wSz=Math.max(12,W*.018); ctx.font=wSz+'px sans-serif'; ctx.fillStyle='rgba(255,255,255,.5)'; ctx.textAlign='right'; ctx.textBaseline='bottom'; ctx.fillText('전도 AR 인증샷',W-12,H-10);
-    document.getElementById('result-char-name').textContent=char?char.name:'';
-    const tag=document.getElementById('result-grade-tag'); tag.className='result-grade-tag '+(char?char.grade:''); tag.textContent=char?GRADE_LABELS[char.grade]:'';
+
+    if (char) {
+      const cx = state.charX / 100 * W;
+      const cy = (1 - state.charY / 100) * H;
+      const sz = Math.min(W, H) * .28;
+      await drawChar(ctx, char, cx, cy, sz);
+      drawNameplate(ctx, char, cx, cy, W);
+      drawBadge(ctx, char, W);
+    }
+
+    const wSz = Math.max(12, W * .018);
+    ctx.font = wSz + 'px sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,.5)';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText('전도 AR 인증샷', W - 12, H - 10);
+
+    document.getElementById('result-char-name').textContent = char ? char.name : '';
+    const tag = document.getElementById('result-grade-tag');
+    tag.className = 'result-grade-tag ' + (char ? char.grade : '');
+    tag.textContent = char ? GRADE_LABELS[char.grade] : '';
     showScreen('result-screen');
-  } catch(e) {  // ← 추가
-    showToast('오류 발생: '+e); // 어떤 오류인지 토스트로 보여줌
+  } catch(e) {
+    showToast('오류: ' + e.message);
   }
 }
 
@@ -376,7 +394,30 @@ function drawBadge(ctx,char,W){
   ctx.fillStyle=gc[char.grade]||'#FFD700'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,bx+bw/2,by+fs*.9);
 }
 function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
-function savePhoto(){const c=document.getElementById('result-canvas');const l=document.createElement('a');l.download='전도인증샷_'+Date.now()+'.png';l.href=c.toDataURL('image/png');l.click();showToast('📸 사진이 저장되었습니다!');}
+
+function savePhoto(){
+  const canvas = document.getElementById('result-canvas');
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  try {
+    const dataUrl = canvas.toDataURL('image/png');
+    if (isIOS) {
+      const win = window.open();
+      win.document.write(`<html><body style="margin:0;background:#000;text-align:center;"><p style="color:#fff;padding:16px;font-size:16px;">📸 이미지를 <b>길게 눌러서</b> 저장하세요</p><img src="${dataUrl}" style="max-width:100vw;"></body></html>`);
+      showToast('이미지를 길게 눌러 저장해주세요!');
+    } else {
+      const l = document.createElement('a');
+      l.download = '전도인증샷_' + Date.now() + '.png';
+      l.href = dataUrl;
+      document.body.appendChild(l);
+      l.click();
+      document.body.removeChild(l);
+      showToast('📸 사진이 저장되었습니다!');
+    }
+  } catch(e) {
+    showToast('❌ 저장 실패: 이미지 오류');
+  }
+}
+
 function retakePhoto(){showScreen('ar-screen');if(!state.stream)startCamera().then(()=>{renderARChar();setupDrag();});}
 function goHome(){stopStream();showScreen('home');updateHomeUI();}
 
