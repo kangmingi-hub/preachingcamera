@@ -154,17 +154,22 @@ function showModal(title, msg, showCancel=false, onOk=null) {
 // ── 전도짝 ──
 function confirmTeam() {
   const p1 = document.getElementById('partner-1').value.trim();
+  if (!p1) { showToast('팀원 1 이름을 입력하세요'); return; }
+  
   const p2 = document.getElementById('partner-2').value.trim();
   const p3 = document.getElementById('partner-3').value.trim();
-  if (!p1) { showToast('팀원 1 이름을 입력하세요'); return; }
   state.partners = [p1, p2, p3].filter(Boolean);
   state.members = state.partners.length + 1;
   state.goal = state.members * 10;
   saveState();
-  showScreen('home');
-  updateHomeUI();
+  
+  showToast('저장완료! 화면전환중...'); // 👈 여기까지 오는지 확인
+  
+  setTimeout(() => {
+    showScreen('home');
+    updateHomeUI();
+  }, 500);
 }
-
 // ── 홈 ──
 function addCount(d) {
   if (!state.goal) { showToast('전도짝을 먼저 입력하세요!'); return; }
