@@ -358,21 +358,34 @@ async function captureAndShow() {
 
 // ✅ 수정된 drawChar 전체
 
-async function drawChar(ctx,char,x,y,sz){
-  ctx.save(); ctx.shadowColor='rgba(255,215,0,.8)'; ctx.shadowBlur=30;
-  const imgUrl = 'https://corsproxy.io/?' + encodeURIComponent(GITHUB_IMG + char.id + '.png');  try{
-    const img=new Image(); img.crossOrigin='anonymous'; img.src=imgUrl;
-    // 타임아웃 3초 추가
+async function drawChar(ctx, char, x, y, sz) {
+  ctx.save();
+  ctx.shadowColor = 'rgba(255,215,0,.8)';
+  ctx.shadowBlur = 30;
+
+  // corsproxy 제거, 직접 URL 사용 + crossOrigin 제거
+  const imgUrl = GITHUB_IMG + char.id + '.png';
+
+  try {
+    const img = new Image();
+    // crossOrigin 설정 제거 (raw.githubusercontent.com은 CORS 허용함)
+    img.src = imgUrl;
+
     await Promise.race([
-      new Promise((r,j)=>{ img.onload=r; img.onerror=j; }),
-      new Promise((_,j)=>setTimeout(()=>j('timeout'),3000))
+      new Promise((r, j) => { img.onload = r; img.onerror = j; }),
+      new Promise((_, j) => setTimeout(() => j('timeout'), 5000))
     ]);
-const ratio=img.naturalWidth/img.naturalHeight||1;
-const dw=sz,dh=sz/ratio;
-ctx.drawImage(img,x-dw/2,y-dh,dw,dh);  }catch(e){
-    // 실패하면 텍스트로 대체
-    ctx.font=(sz*.5)+'px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillStyle='rgba(255,255,255,.3)'; ctx.fillText('👤',x,y-sz/2);
+
+    const ratio = img.naturalWidth / img.naturalHeight || 1;
+    const dw = sz, dh = sz / ratio;
+    ctx.drawImage(img, x - dw / 2, y - dh, dw, dh);
+
+  } catch(e) {
+    ctx.font = (sz * .5) + 'px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(255,255,255,.3)';
+    ctx.fillText('👤', x, y - sz / 2);
   }
   ctx.restore();
 }
