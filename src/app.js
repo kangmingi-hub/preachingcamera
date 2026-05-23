@@ -165,6 +165,7 @@ function confirmTeam() {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('home').classList.add('active');
   updateHomeUI();
+}
 
  
 // ── 홈 ──
