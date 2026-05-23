@@ -222,24 +222,34 @@ function showChangePw(){
 
 // ── 가챠 ──
 function rollCharacter() {
-  const pool=DEFAULT_CHARS;
-  // 목표 초과 인원 10명당 epic+1%, legend+0.5%
-  const extra=Math.max(0, state.count - state.goal);
-  const bonusSteps=Math.floor(extra/10);
-  const epicBonus=bonusSteps*1;
-  const legendBonus=bonusSteps*0.5;
-  const weights={
+  const extra = Math.max(0, state.count - state.goal);
+  const bonusSteps = Math.floor(extra / 10);
+  const epicBonus = bonusSteps * 1;
+  const legendBonus = bonusSteps * 0.5;
+
+  const weights = {
     common: Math.max(0, GRADE_WEIGHTS.common - epicBonus - legendBonus),
     rare:   GRADE_WEIGHTS.rare,
     epic:   GRADE_WEIGHTS.epic + epicBonus,
     legend: GRADE_WEIGHTS.legend + legendBonus,
   };
-  const total=Object.values(weights).reduce((a,b)=>a+b,0);
-  const r=Math.random()*total; let cum=0; let grade='common';
-  for(const [g,w] of Object.entries(weights)){cum+=w;if(r<cum){grade=g;break;}}
-  const gp=pool.filter(c=>c.grade===grade); const src=gp.length>0?gp:pool;
-  return src[Math.floor(Math.random()*src.length)];
+
+  // 각 캐릭터에 등급 가중치를 균등 분배
+  const pool = DEFAULT_CHARS.map(c => ({
+    ...c,
+    w: weights[c.grade] / DEFAULT_CHARS.filter(x => x.grade === c.grade).length
+  }));
+
+  const total = pool.reduce((a, b) => a + b.w, 0);
+  let r = Math.random() * total;
+
+  for (const c of pool) {
+    r -= c.w;
+    if (r <= 0) return c;
+  }
+  return pool[pool.length - 1];
 }
+
 function startGacha() {
   const char=rollCharacter(); state.currentChar=char; state.charX=50; state.charY=28;
   const card=document.getElementById('gacha-card'); card.className='gacha-card '+char.grade;
