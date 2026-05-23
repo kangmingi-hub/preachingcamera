@@ -113,6 +113,7 @@ const state = {
   members:0, goal:0, count:0, characters:[],
   currentChar:null, stream:null, charX:50, charY:28,
   partners:[], facingMode:'user',
+  collectionSaved: false, // 
 };
 
 // ── 저장/불러오기 ──
@@ -307,15 +308,24 @@ function setupDrag() {
   window.addEventListener('mousemove',onMove); window.addEventListener('touchmove',onMove,{passive:false});
   window.addEventListener('mouseup',onEnd); window.addEventListener('touchend',onEnd);
 }
-function rerollCharacter() { state.currentChar=rollCharacter(); renderARChar(); spawnParticles(state.currentChar.grade); showToast('🎲 '+state.currentChar.name+' 등장!'); }
+
+function rerollCharacter() {
+  state.currentChar=rollCharacter();
+  state.collectionSaved = false; // ← 새 캐릭터니까 초기화
+  renderARChar();
+  spawnParticles(state.currentChar.grade);
+  showToast('🎲 '+state.currentChar.name+' 등장!');
+}
 
 // ── 사진 ──
 async function takePhoto() {
   const flash=document.getElementById('flash'); flash.classList.remove('bang'); void flash.offsetWidth; flash.classList.add('bang');
   setTimeout(async()=>{ 
     await captureAndShow(); 
-    if(state.currentChar&&arUser?.id) saveToCollection(state.currentChar);
-    // 인증샷 찍으면 카운트 초기화
+    if(state.currentChar && arUser?.id && !state.collectionSaved) {
+      saveToCollection(state.currentChar);
+      state.collectionSaved = true; // ← 저장 후 막기
+    }
     state.count=0;
     saveState();
   },80);
