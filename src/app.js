@@ -471,39 +471,44 @@ async function saveToCollection(char){
 }
 
 // ── 초기화 ──
-async function initApp(){
-  
+
+async function initApp() {
   loadState();
-  state.count=0;
+  state.count = 0;
   saveState();
 
   // Supabase 캐릭터 불러오기
-  const{data:chars}=await sb.from('characters').select('*').order('created_at');
-  if(chars&&chars.length>0){
-    state.characters=chars.map(c=>({
-      id:c.id, name:c.name, grade:c.grade,
-      emoji:c.emoji||null, imgData:c.img_data||null, desc:c.description||''
+  const { data: chars } = await sb.from('characters').select('*').order('created_at');
+  if (chars && chars.length > 0) {
+    state.characters = chars.map(c => ({
+      id: c.id, name: c.name, grade: c.grade,
+      emoji: c.emoji || null, imgData: c.img_data || null, desc: c.description || ''
     }));
     saveState();
   }
 
-  // 유저 role 불러오기 및 홈 버튼 주입
-  if(arUser){
-    const{data:me}=await sb.from('users').select('role').eq('id',arUser.id).single();
-    if(me){ arUser.role=me.role; localStorage.setItem('ar_user',JSON.stringify(arUser)); }
+  // 유저 role 불러오기
+  if (arUser) {
+    const { data: me } = await sb.from('users').select('role').eq('id', arUser.id).single();
+    if (me) { arUser.role = me.role; localStorage.setItem('ar_user', JSON.stringify(arUser)); }
     injectHomeUserBar(arUser);
-    if(arUser.role==='admin'){
-      const btn=document.createElement('button');
-      btn.textContent='⚙️ 관리자'; btn.onclick=()=>location.href='/admin';
-     btn.style.cssText='font-size:11px;color:#ff8888;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);border-radius:99px;padding:5px 11px;cursor:pointer;';
-      const btnRow=document.getElementById('home-btn-row');
-      if(btnRow) btnRow.appendChild(btn);
+    if (arUser.role === 'admin') {
+      const btn = document.createElement('button');
+      btn.textContent = '⚙️ 관리자'; btn.onclick = () => location.href = '/admin';
+      btn.style.cssText = 'font-size:11px;color:#ff8888;background:rgba(255,100,100,.12);border:1px solid rgba(255,100,100,.3);border-radius:99px;padding:5px 11px;cursor:pointer;';
+      const btnRow = document.getElementById('home-btn-row');
+      if (btnRow) btnRow.appendChild(btn);
       else document.getElementById('home').appendChild(btn);
     }
   }
 
-  // 항상 전도짝 입력 화면으로 시작
-  showScreen('team-screen');
+  // ✅ 팀원이 이미 있으면 홈으로, 없으면 팀 입력 화면으로
+  if (state.partners && state.partners.length > 0) {
+    showScreen('home');
+    updateHomeUI();
+  } else {
+    showScreen('team-screen');
+  }
 }
 
 window.addEventListener('DOMContentLoaded', initApp);
